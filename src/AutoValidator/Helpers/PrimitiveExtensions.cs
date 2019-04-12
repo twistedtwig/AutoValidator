@@ -5,7 +5,7 @@ using System.Reflection;
 namespace AutoValidator.Helpers
 {
     //source: https://github.com/AutoMapper/AutoMapper/blob/master/src/AutoMapper/Configuration/PrimitiveExtensions.cs
-    internal static class PrimitiveExtensions
+    public static class PrimitiveExtensions
     {
         public static bool IsSetType(this Type type)
             => type.ImplementsGenericInterface(typeof(ISet<>));

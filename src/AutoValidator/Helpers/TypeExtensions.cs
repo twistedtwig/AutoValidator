@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Emit;
 
 namespace AutoValidator.Helpers
 {
     //source: https://github.com/AutoMapper/AutoMapper/blob/master/src/AutoMapper/TypeExtensions.cs
-    internal static class TypeExtensions
+    public static class TypeExtensions
     {
         public static bool Has<TAttribute>(this Type type) where TAttribute : Attribute => type.GetTypeInfo().IsDefined(typeof(TAttribute), inherit: false);
 
@@ -18,8 +17,6 @@ namespace AutoValidator.Helpers
         public static Type[] GetGenericParameters(this Type type) => type.GetGenericTypeDefinition().GetTypeInfo().GenericTypeParameters;
 
         public static IEnumerable<ConstructorInfo> GetDeclaredConstructors(this Type type) => type.GetTypeInfo().DeclaredConstructors;
-
-        public static Type CreateType(this TypeBuilder type) => type.CreateTypeInfo().AsType();
 
         public static IEnumerable<MemberInfo> GetDeclaredMembers(this Type type) => type.GetTypeInfo().DeclaredMembers;
 
