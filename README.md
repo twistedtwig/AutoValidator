@@ -40,6 +40,26 @@ IValidator MinLength(string text, int minLength, string propName, string message
 IValidator MaxLength(string text, int maxLength, string propName, string message = null);
 ```
 
+##ValidationResult
+
+The result object has two proprties:
+
+ * Boolean - Success
+ * Dictionary<string, string> - Errors
+
+ An example error could be:
+
+ ```json
+ {
+	success: false,
+	errors: {
+		{ 'email', 'invalid email'},
+		{ 'firstName', 'must not be null'},
+		{ 'age', 'Must be at least 18'}
+	}
+ }
+ ```
+
 ## Simple validation
 
 The simplest way to validate is to call each validation method providing all the data required.
@@ -58,11 +78,13 @@ The example above validates the email address `myemail.com` for the property nam
 
 
 ### TODO
- - [] write up validation schemas
+ - [] fix up Teamcity
+ - [] add unit tests to Teamcity
  - [] create configuration object for validation schema
- - [] creating maps for all functions
- - [] creating custom validation function
  - [] configuration setup to allow add mappings from assemblies
+ - [] creating maps for all functions
+ - [] write up validation schemas
+ - [] creating custom validation function
  - [] allow global CreateMap to be defined in initial setup configuration
  - [] ensure all mappings are being saved
  - [] factory for class type to get instance of a validator with the defined mappings
