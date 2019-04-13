@@ -49,7 +49,7 @@ The result object has two proprties:
 
  An example error could be:
 
- ```json
+ ```javascript
  {
 	success: false,
 	errors: {
@@ -78,8 +78,8 @@ The example above validates the email address `myemail.com` for the property nam
 
 
 ### TODO
- - [] fix up Teamcity
- - [] add unit tests to Teamcity
+ - [x] fix up Teamcity
+ - [x] add unit tests to Teamcity
  - [] create configuration object for validation schema
  - [] configuration setup to allow add mappings from assemblies
  - [] creating maps for all functions
