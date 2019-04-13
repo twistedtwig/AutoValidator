@@ -80,13 +80,13 @@ The example above validates the email address `myemail.com` for the property nam
 ### TODO
  - [x] fix up Teamcity
  - [x] add unit tests to Teamcity
- - [] create configuration object for validation schema
- - [] configuration setup to allow add mappings from assemblies
- - [] creating maps for all functions
- - [] write up validation schemas
- - [] creating custom validation function
- - [] allow global CreateMap to be defined in initial setup configuration
- - [] ensure all mappings are being saved
- - [] factory for class type to get instance of a validator with the defined mappings
- - [] be able to use the mapping style in simple validation process
+ - [ ] create configuration object for validation schema
+ - [ ] configuration setup to allow add mappings from assemblies
+ - [ ] creating maps for all functions
+ - [ ] write up validation schemas
+ - [ ] creating custom validation function
+ - [ ] allow global CreateMap to be defined in initial setup configuration
+ - [ ] ensure all mappings are being saved
+ - [ ] factory for class type to get instance of a validator with the defined mappings
+ - [ ] be able to use the mapping style in simple validation process
 
