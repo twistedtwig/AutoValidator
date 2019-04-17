@@ -180,5 +180,44 @@ namespace AutoValidator.Tests
             // assert
             result.Success.Should().BeTrue();
         }
+
+        [Test]
+
+        public void Int_Min_Value_Too_Low_Is_Not_Valid()
+        {
+            // arrange
+            
+            // act
+            var result = _subject.MinValue(2, 3, "val").Validate();
+
+            // assert
+            result.Success.Should().BeFalse();
+        }
+
+        [Test]
+
+        public void Int_Min_Value_Equal_To_Min_Is_Valid()
+        {
+            // arrange
+
+            // act
+            var result = _subject.MinValue(3, 3, "val").Validate();
+
+            // assert
+            result.Success.Should().BeTrue();
+        }
+
+        [Test]
+
+        public void Int_Min_Value_Greater_Than_Min_Is_Valid()
+        {
+            // arrange
+
+            // act
+            var result = _subject.MinValue(4, 3, "val").Validate();
+
+            // assert
+            result.Success.Should().BeTrue();
+        }
     }
 }

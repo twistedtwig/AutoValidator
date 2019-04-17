@@ -1,18 +1,39 @@
 ﻿using System;
 using System.Linq.Expressions;
-using AutoValidator.Helpers;
 using AutoValidator.Interfaces;
+using AutoValidator.Models;
 
 namespace AutoValidator.Impl
 {
-    public class MappingExpression<T> : MappingExpressionBase, IMappingExpression<T>
+    public class MappingExpression<T> : MappingExpressionBase<T>, IMappingExpression<T>
     {
         public MappingExpression() : base(typeof(T)) { }
 
-        public IMappingExpression<T> ForMember<TMember>(Expression<Func<T, TMember>> member, Action<IValidatorExpression> memberAction)
+        public ValidationResult Validate(T obj)
         {
-            var memberInfo = ReflectionHelper.FindProperty(member);
+            var result = ValidationResult.SuccessResult;
 
+            foreach (var constraint in Constraints)
+            {
+                if(!constraint.Validate(obj))
+                {
+                    result.Success = false;
+                    result.Errors.Add(constraint.PropName, constraint.ErrorMessage);
+                }
+            }
+
+            return result;
+        }
+        
+        public IMappingExpression<T> ForMember<TMember>(Expression<Func<T, TMember>> memberSelectorExpression, Expression<Func<TMember, IValidatorExpression, bool>> memberValidationExpression)
+        {
+            Constraints.Add(new ClassObjectValidator<T, TMember>(memberSelectorExpression, memberValidationExpression));
+            return this;
+        }
+        
+        public IMappingExpression<T> ForMember<TMember>(Expression<Func<T, TMember>> memberSelectorExpression, Func<TMember, bool> memberValidationFunc, string errorMessage = null)
+        {
+            Constraints.Add(new ObjectValidator<T, TMember>(memberSelectorExpression, memberValidationFunc, errorMessage ?? memberSelectorExpression + " did not pass validation"));
             return this;
         }
     }

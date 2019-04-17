@@ -80,13 +80,21 @@ The example above validates the email address `myemail.com` for the property nam
 ### TODO
  - [x] fix up Teamcity
  - [x] add unit tests to Teamcity
+ - [x] write unit tests for all IValidatorExpressions
+ - [ ] be able to create expression and validate inline (without classValidator)
+ - [ ] classValidator creation finds mapping and adds expressions
  - [ ] create configuration object for validation schema
  - [ ] configuration setup to allow add mappings from assemblies
- - [ ] creating maps for all functions
- - [ ] write up validation schemas
- - [ ] creating custom validation function
+ - [x] creating custom validation function
  - [ ] allow global CreateMap to be defined in initial setup configuration
  - [ ] ensure all mappings are being saved
  - [ ] factory for class type to get instance of a validator with the defined mappings
  - [ ] be able to use the mapping style in simple validation process
+ - [ ] have the ability to clear validation rules for T (only within that instance of a validator)
+ - [ ] should be able to have multiple validator errors for one prop
+ - [ ] multiple validation errors for one prop should have an array of errors as well as a nicely formatted string represntation.
+ - [ ] custom expression error message string format options
+ - [ ] standard expression error message string format options
+ - [ ] test error message override in classValidator, regular string validator and regular fluent validator
+ - [ ] add more IValidatorExpression functions
 

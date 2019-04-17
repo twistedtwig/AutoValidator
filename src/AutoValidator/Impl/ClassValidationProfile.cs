@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoValidator.Interfaces;
 
 namespace AutoValidator.Impl
@@ -11,6 +12,8 @@ namespace AutoValidator.Impl
         {
             _mappings = new List<ITypeMapConfiguration>();
         }
+
+        public IEnumerable<ITypeMapConfiguration> ValidationExpressions => _mappings.AsEnumerable();
 
         public IMappingExpression<T> CreateMap<T>()
         {
