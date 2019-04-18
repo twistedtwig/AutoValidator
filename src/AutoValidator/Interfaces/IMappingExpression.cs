@@ -6,7 +6,7 @@ namespace AutoValidator.Interfaces
 {
     public interface ITypeMapConfiguration
     {
-        ConfigurationClassExpressionValidationResult ValidateExpression();
+        ClassExpressionValidationResult ValidateExpression();
     }
 
     public interface IMappingExpression<T> : ITypeMapConfiguration

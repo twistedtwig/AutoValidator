@@ -14,8 +14,6 @@ namespace AutoValidator.Impl
             _mappings = new List<ITypeMapConfiguration>();
         }
 
-        public IEnumerable<ITypeMapConfiguration> ValidationExpressions => _mappings.AsEnumerable();
-
         public IMappingExpression<T> CreateMap<T>()
         {
             var expression = new MappingExpression<T>();
@@ -26,7 +24,7 @@ namespace AutoValidator.Impl
 
         public ProfileExpressionValidationResult ValidateExpression()
         {
-            var expressionMappings = new List<ConfigurationClassExpressionValidationResult>();
+            var expressionMappings = new List<ClassExpressionValidationResult>();
             foreach (var mapping in _mappings)
             {
                 expressionMappings.Add(mapping.ValidateExpression());
@@ -35,7 +33,7 @@ namespace AutoValidator.Impl
             var result = new ProfileExpressionValidationResult
             {
                 Success = expressionMappings.All(x => x.Success),
-                ExpressionErrors = expressionMappings
+                ExpressionResults = expressionMappings
             };
 
             return result;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoValidator.Interfaces;
 using AutoValidator.Models;
 
@@ -13,11 +14,33 @@ namespace AutoValidator.Impl
             Constraints = new List<IObjectValidator<T>>();
         }
 
-        public ConfigurationClassExpressionValidationResult ValidateExpression()
+        public ClassExpressionValidationResult ValidateExpression()
         {
-            // we are checking that all properties have one and only one mapping
+            var result = new ClassExpressionValidationResult(typeof(T));
 
-            throw new System.NotImplementedException();
+            var objType = typeof(T);
+            var propNames = objType.GetProperties().Select(p =>  p.Name).ToList();
+
+            var constraintPropNames = Constraints.Select(x => x.PropName).ToList();
+            var constraintPropNameCount = constraintPropNames.GroupBy(s => s);
+
+            foreach (var nameCount in constraintPropNameCount)
+            {
+                if (nameCount.Count() > 1)
+                {
+                    result.Errors.Add(new ExpressionValidationPropertyError(nameCount.Key, $"Duplicate mapping for property '{nameCount.Key}'"));
+                }
+            }
+
+            var missingMappings = propNames.Except(constraintPropNames);
+            foreach (var missingMapping in missingMappings)
+            {
+                result.Errors.Add(new ExpressionValidationPropertyError(missingMapping, $"Missing mapping for property '{missingMapping}'"));
+            }
+
+            result.Success = !result.Errors.Any();
+
+            return result;
         }
     }
 }

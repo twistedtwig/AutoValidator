@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AutoValidator.Impl;
 using AutoValidator.Tests.Models;
 using FluentAssertions;
@@ -182,7 +181,9 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeTrue();
-            result.ExpressionErrors.Count.Should().Be(0);
+            result.ExpressionResults.Count.Should().Be(1);
+            result.ExpressionResults[0].Success.Should().BeTrue();
+            result.ExpressionResults[0].Errors.Count.Should().Be(0);
         }
 
         [Test]
@@ -197,7 +198,9 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeTrue();
-            result.ExpressionErrors.Count.Should().Be(0);
+            result.ExpressionResults.Count.Should().Be(1);
+            result.ExpressionResults[0].Success.Should().BeTrue();
+            result.ExpressionResults[0].Errors.Count.Should().Be(0);
         }
 
         [Test]
@@ -212,12 +215,12 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeFalse();
-            result.ExpressionErrors.Count.Should().Be(1);
-            var model1Expression = result.ExpressionErrors[0];
+            result.ExpressionResults.Count.Should().Be(1);
+            var model1Expression = result.ExpressionResults[0];
             model1Expression.SourceClass.Should().Be<Model1>();
 
-            model1Expression.Errors.Should().Contain(x => x == "Missing mapping for 'Name'");
-            model1Expression.PropertiesThatHaveErrors.Should().Contain("Name");
+            var error = model1Expression.Errors.Single(x => x.PropertyName == "Name");
+            error.Error.Should().Be("Missing mapping for property 'Name'");
         }
 
         [Test]
@@ -231,15 +234,13 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeFalse();
-            result.ExpressionErrors.Count.Should().Be(1);
-            var model1Expression = result.ExpressionErrors[0];
+            result.ExpressionResults.Count.Should().Be(1);
+            var model1Expression = result.ExpressionResults[0];
             model1Expression.SourceClass.Should().Be<Model1>();
 
             model1Expression.Errors.Count.Should().Be(1);
-            model1Expression.Errors.Should().Contain(x => x == "Duplicate mapping for 'Age'");
-
-            model1Expression.PropertiesThatHaveErrors.Count.Should().Be(1);
-            model1Expression.PropertiesThatHaveErrors.Should().Contain("Age");
+            var error = model1Expression.Errors.Single(x => x.PropertyName == "Age");
+            error.Error.Should().Be("Duplicate mapping for property 'Age'");
         }
 
         [Test]
@@ -253,17 +254,17 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeFalse();
-            result.ExpressionErrors.Count.Should().Be(1);
-            var model1Expression = result.ExpressionErrors[0];
+            result.ExpressionResults.Count.Should().Be(1);
+            var model1Expression = result.ExpressionResults[0];
             model1Expression.SourceClass.Should().Be<Model1>();
 
             model1Expression.Errors.Count.Should().Be(2);
-            model1Expression.Errors.Should().Contain(x => x == "Missing mapping for 'Name'");
-            model1Expression.Errors.Should().Contain(x => x == "Duplicate mapping for 'Age'");
 
-            model1Expression.PropertiesThatHaveErrors.Count.Should().Be(2);
-            model1Expression.PropertiesThatHaveErrors.Should().Contain("Age");
-            model1Expression.PropertiesThatHaveErrors.Should().Contain("Name");
+            var error1 = model1Expression.Errors.Single(x => x.PropertyName == "Age");
+            error1.Error.Should().Be("Duplicate mapping for property 'Age'");
+
+            var error2 = model1Expression.Errors.Single(x => x.PropertyName == "Name");
+            error2.Error.Should().Be("Missing mapping for property 'Name'");
         }
         
         [Test]
@@ -277,26 +278,22 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeFalse();
-            result.ExpressionErrors.Count.Should().Be(2);
-            var model1Expression = result.ExpressionErrors[0];
+            result.ExpressionResults.Count.Should().Be(2);
+            var model1Expression = result.ExpressionResults[0];
             model1Expression.SourceClass.Should().Be<Model1>();
 
             model1Expression.Errors.Count.Should().Be(1);
-            model1Expression.Errors.Should().Contain(x => x == "Missing mapping for 'Name'");
 
-            model1Expression.PropertiesThatHaveErrors.Count.Should().Be(1);
-            model1Expression.PropertiesThatHaveErrors.Should().Contain("Name");
-
-            var model2Expression = result.ExpressionErrors[1];
+            var error1 = model1Expression.Errors.Single(x => x.PropertyName == "Name");
+            error1.Error.Should().Be("Missing mapping for property 'Name'");
+            
+            var model2Expression = result.ExpressionResults[1];
             model2Expression.SourceClass.Should().Be<Model2>();
 
-            model2Expression.Errors.Count.Should().Be(2);
-            model2Expression.Errors.Should().Contain(x => x == "Missing mapping for 'Number'");
-            model2Expression.Errors.Should().Contain(x => x == "Duplicate mapping for 'Category'");
-
-            model2Expression.PropertiesThatHaveErrors.Count.Should().Be(2);
-            model2Expression.PropertiesThatHaveErrors.Should().Contain("Number");
-            model2Expression.PropertiesThatHaveErrors.Should().Contain("Category");
+            var error2 = model2Expression.Errors.Single(x => x.PropertyName == "Number");
+            var error3 = model2Expression.Errors.Single(x => x.PropertyName == "Category");
+            error2.Error.Should().Be("Missing mapping for property 'Number'");
+            error3.Error.Should().Be("Duplicate mapping for property 'Category'");            
         }
     }
 }
