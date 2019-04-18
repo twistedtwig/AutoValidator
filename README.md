@@ -81,10 +81,13 @@ The example above validates the email address `myemail.com` for the property nam
  - [x] fix up Teamcity
  - [x] add unit tests to Teamcity
  - [x] write unit tests for all IValidatorExpressions
+ - [ ] class validation and class expression validation assertion with error messages
+ - [ ] static autovalidator initializer for mapping
+ - [ ] static autovalidator initializer for assert everything is valid.
  - [ ] be able to create expression and validate inline (without classValidator)
  - [ ] classValidator creation finds mapping and adds expressions
  - [ ] create configuration object for validation schema
- - [ ] configuration setup to allow add mappings from assemblies
+ - [x] configuration setup to allow add mappings from assemblies
  - [x] creating custom validation function
  - [ ] allow global CreateMap to be defined in initial setup configuration
  - [ ] ensure all mappings are being saved
