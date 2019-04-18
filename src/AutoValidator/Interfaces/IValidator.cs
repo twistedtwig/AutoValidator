@@ -30,6 +30,8 @@ namespace AutoValidator.Interfaces
 
     public interface IValidatorExpression
     {
+        bool Ignore();
+
         bool IsEmailAddress(string email, string message = null);
 
         //string expressions

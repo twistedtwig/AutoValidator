@@ -20,4 +20,4 @@ namespace AutoValidator.Impl
 }
 
 
-//need to think about how to do Validate<T>
+//need to think about how to do ValidateExpression<T>

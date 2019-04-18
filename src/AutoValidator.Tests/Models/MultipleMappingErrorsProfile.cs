@@ -2,13 +2,13 @@
 
 namespace AutoValidator.Tests.Models
 {
-    public class Profile2 : ClassValidationProfile
+    class MultipleMappingErrorsProfile : ClassValidationProfile
     {
-        public Profile2()
+        public MultipleMappingErrorsProfile()
         {
             CreateMap<Model1>()
                 .ForMember(x => x.Age, (age, exp) => exp.MinValue(age, 18, null))
-                .ForMember(x => x.Name, (name, exp) => exp.Ignore());
+                .ForMember(x => x.Age, (age, exp) => exp.MinValue(age, 18, null));
         }
     }
 }

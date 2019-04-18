@@ -154,22 +154,7 @@ namespace AutoValidator.Tests
             // assert
             _subject.Profiles.ToList().Count.Should().Be(1);
         }
-
-        [Test]
-
-        public void Adding_Profile_From_Assembly()
-        {
-            // arrange
-            _subject.Profiles.Should().BeEmpty();
-
-            // act
-            _subject.AddProfile(System.Reflection.Assembly.GetExecutingAssembly());
-
-            // assert
-            _subject.Profiles.Should().Contain(x => x.GetType() == typeof(Profile1));
-            _subject.Profiles.Should().Contain(x => x.GetType() == typeof(Profile2));
-        }
-
+        
         [Test]
 
         public void Adding_Profiles_From_Assembly()
@@ -187,27 +172,32 @@ namespace AutoValidator.Tests
 
         [Test]
 
-        public void Profile_All_Mappings_Is_Valid()
+        public void Profile_All_Mappings_Are_Valid()
         {
             // arrange
             var profile = new Profile1();
             
             // act
+            var result = profile.ValidateExpression();
 
             // assert
-            throw new NotImplementedException();
+            result.Success.Should().BeTrue();
+            result.ExpressionErrors.Count.Should().Be(0);
         }
 
         [Test]
 
-        public void Profile_With_Igore_And_Mappings_Is_Valid()
+        public void Profile_With_Ignore_And_Mappings_Are_Valid()
         {
             // arrange
-            
+            var profile = new Profile2();
+
             // act
+            var result = profile.ValidateExpression();
 
             // assert
-            throw new NotImplementedException();
+            result.Success.Should().BeTrue();
+            result.ExpressionErrors.Count.Should().Be(0);
         }
 
         [Test]
@@ -215,11 +205,98 @@ namespace AutoValidator.Tests
         public void Profile_Missing_A_Mapping_Is_Not_Valid()
         {
             // arrange
-            
+            var profile = new MissingMappingProfile();
+
             // act
+            var result = profile.ValidateExpression();
 
             // assert
-            throw new NotImplementedException();
+            result.Success.Should().BeFalse();
+            result.ExpressionErrors.Count.Should().Be(1);
+            var model1Expression = result.ExpressionErrors[0];
+            model1Expression.SourceClass.Should().Be<Model1>();
+
+            model1Expression.Errors.Should().Contain(x => x == "Missing mapping for 'Name'");
+            model1Expression.PropertiesThatHaveErrors.Should().Contain("Name");
+        }
+
+        [Test]
+
+        public void Profile_With_Duplicate_Member_Mapping_Is_Not_Valid()
+        { // arrange
+            var profile = new DuplicateMappingProfile();
+
+            // act
+            var result = profile.ValidateExpression();
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.ExpressionErrors.Count.Should().Be(1);
+            var model1Expression = result.ExpressionErrors[0];
+            model1Expression.SourceClass.Should().Be<Model1>();
+
+            model1Expression.Errors.Count.Should().Be(1);
+            model1Expression.Errors.Should().Contain(x => x == "Duplicate mapping for 'Age'");
+
+            model1Expression.PropertiesThatHaveErrors.Count.Should().Be(1);
+            model1Expression.PropertiesThatHaveErrors.Should().Contain("Age");
+        }
+
+        [Test]
+
+        public void Profile_With_Multiple_Member_Mapping_Errors_Is_Not_Valid()
+        { // arrange
+            var profile = new MultipleMappingErrorsProfile();
+
+            // act
+            var result = profile.ValidateExpression();
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.ExpressionErrors.Count.Should().Be(1);
+            var model1Expression = result.ExpressionErrors[0];
+            model1Expression.SourceClass.Should().Be<Model1>();
+
+            model1Expression.Errors.Count.Should().Be(2);
+            model1Expression.Errors.Should().Contain(x => x == "Missing mapping for 'Name'");
+            model1Expression.Errors.Should().Contain(x => x == "Duplicate mapping for 'Age'");
+
+            model1Expression.PropertiesThatHaveErrors.Count.Should().Be(2);
+            model1Expression.PropertiesThatHaveErrors.Should().Contain("Age");
+            model1Expression.PropertiesThatHaveErrors.Should().Contain("Name");
+        }
+        
+        [Test]
+
+        public void Profile_With_Multiple_Mappings_Each_Mapping_Has_Errors_Is_Not_Valid()
+        { // arrange
+            var profile = new MultipleMappingsWithErrorsProfile();
+
+            // act
+            var result = profile.ValidateExpression();
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.ExpressionErrors.Count.Should().Be(2);
+            var model1Expression = result.ExpressionErrors[0];
+            model1Expression.SourceClass.Should().Be<Model1>();
+
+            model1Expression.Errors.Count.Should().Be(1);
+            model1Expression.Errors.Should().Contain(x => x == "Missing mapping for 'Name'");
+
+            model1Expression.PropertiesThatHaveErrors.Count.Should().Be(1);
+            model1Expression.PropertiesThatHaveErrors.Should().Contain("Name");
+
+            var model2Expression = result.ExpressionErrors[1];
+            model2Expression.SourceClass.Should().Be<Model2>();
+
+            model2Expression.Errors.Count.Should().Be(2);
+            model2Expression.Errors.Should().Contain(x => x == "Missing mapping for 'Number'");
+            model2Expression.Errors.Should().Contain(x => x == "Duplicate mapping for 'Category'");
+
+            model2Expression.PropertiesThatHaveErrors.Count.Should().Be(2);
+            model2Expression.PropertiesThatHaveErrors.Should().Contain("Number");
+            model2Expression.PropertiesThatHaveErrors.Should().Contain("Category");
         }
     }
 }

@@ -7,8 +7,6 @@ namespace AutoValidator.Impl
 {
     public class MappingExpression<T> : MappingExpressionBase<T>, IMappingExpression<T>
     {
-        public MappingExpression() : base(typeof(T)) { }
-
         public ValidationResult Validate(T obj)
         {
             var result = ValidationResult.SuccessResult;
@@ -24,7 +22,12 @@ namespace AutoValidator.Impl
 
             return result;
         }
-        
+
+        public ProfileExpressionValidationResult ValidateExpression()
+        {
+            throw new NotImplementedException();
+        }
+
         public IMappingExpression<T> ForMember<TMember>(Expression<Func<T, TMember>> memberSelectorExpression, Expression<Func<TMember, IValidatorExpression, bool>> memberValidationExpression)
         {
             Constraints.Add(new ClassObjectValidator<T, TMember>(memberSelectorExpression, memberValidationExpression));

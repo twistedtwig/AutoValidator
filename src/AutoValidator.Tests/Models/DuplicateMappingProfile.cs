@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AutoValidator.Impl;
+﻿using AutoValidator.Impl;
 
 namespace AutoValidator.Tests.Models
 {

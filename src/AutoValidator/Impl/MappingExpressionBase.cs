@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AutoValidator.Interfaces;
+using AutoValidator.Models;
 
 namespace AutoValidator.Impl
 {
@@ -8,12 +8,16 @@ namespace AutoValidator.Impl
     {
         protected List<IObjectValidator<T>> Constraints;
 
-        protected MappingExpressionBase(Type source)
+        protected MappingExpressionBase()
         {
             Constraints = new List<IObjectValidator<T>>();
-            SourceType = source;
         }
 
-        public Type SourceType { get; }
+        public ConfigurationClassExpressionValidationResult ValidateExpression()
+        {
+            // we are checking that all properties have one and only one mapping
+
+            throw new System.NotImplementedException();
+        }
     }
 }

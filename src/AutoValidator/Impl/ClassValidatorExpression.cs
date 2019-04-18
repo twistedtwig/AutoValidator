@@ -6,6 +6,12 @@ namespace AutoValidator.Impl
 {
     public class ClassValidatorExpression : IValidatorExpression
     {
+        public bool Ignore()
+        {
+            // doesn't need to do anything.  it is just here to ensure we can tell system to ignore a property.
+            return true;
+        }
+
         public bool IsEmailAddress(string email, string message = null)
         {
             bool valid = false;

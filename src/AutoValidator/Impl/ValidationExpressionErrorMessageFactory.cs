@@ -52,6 +52,10 @@ namespace AutoValidator.Impl
                     variables.Add(GetArgumentValue(methodCall.Arguments[1]));
                     break;
 
+                case "Boolean Ignore()":
+                    format = ValidationMessageConstStrings.Ignore;
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException("unknown IValidatorExpression expression method");
             }

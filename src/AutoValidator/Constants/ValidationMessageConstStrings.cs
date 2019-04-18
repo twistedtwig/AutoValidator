@@ -8,5 +8,6 @@
         public static string StringMaxLength => "{1} should not be longer than {0}";
 
         public static string IntMinValue => "{1} should be at least {0}";
+        public static string Ignore => "Ignoring property {0}";
     }
 }

@@ -11,6 +11,11 @@ namespace AutoValidator
         {
 //            Configuration = new MapperConfiguration(config);
 //            Instance = new Mapper(Configuration);
+
+            //TODO setup static initalizer
         }
+
+
+        //TODO setup static assert are all mappings valid
     }
 }

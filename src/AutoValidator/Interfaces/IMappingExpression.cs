@@ -6,13 +6,12 @@ namespace AutoValidator.Interfaces
 {
     public interface ITypeMapConfiguration
     {
-        Type SourceType { get; }
+        ConfigurationClassExpressionValidationResult ValidateExpression();
     }
 
     public interface IMappingExpression<T> : ITypeMapConfiguration
     {
         ValidationResult Validate(T obj);
-
 
         /// <summary>
         /// Standard validation expressions
