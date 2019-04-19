@@ -1,4 +1,6 @@
-﻿using AutoValidator.Impl;
+﻿using System;
+using AutoValidator.Impl;
+using AutoValidator.Tests.Models;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -11,7 +13,10 @@ namespace AutoValidator.Tests
         [SetUp]
         public void Init()
         {
-            _subject = new ValidatorFactory();
+            var expression = new MapperConfigurationExpression();
+            expression.AddProfile<Profile1>();
+
+            _subject = new ValidatorFactory(expression);
         }
 
 
@@ -27,6 +32,46 @@ namespace AutoValidator.Tests
 
             // assert
             v1.Should().NotBeSameAs(v2);
+        }
+
+        [Test]
+
+        public void Create_Factory_Will_Return_A_Valid_Factory()
+        {
+            // arrange
+            var model = new Model1
+            {
+                Age = 23,
+                Name = "Jon Hawkins"
+            };
+
+            // act
+            var validator = _subject.Create<Model1>();
+
+            // assert
+            validator.Should().NotBeNull();
+            var validationResult = validator.Validate(model);
+            validationResult.Should().NotBeNull();
+            validationResult.Success.Should().BeTrue();
+        }
+
+        [Test]
+
+        public void Unmapped_Model_Will_Throw_Error()
+        {
+            // arrange
+            var model = new Model2
+            {
+                Category = "cat1",
+                EmailAddress = "email@email.com",
+                Number = 999
+            };
+
+            // act
+            Action action = () => _subject.Create<Model2>();
+
+            // assert
+            action.Should().Throw<ArgumentNullException>().WithMessage("unmapped model requested");
         }
     }
 }

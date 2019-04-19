@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using AutoValidator.Helpers;
 using AutoValidator.Interfaces;
+using AutoValidator.Models;
 
 namespace AutoValidator.Impl
 {
@@ -29,12 +30,17 @@ namespace AutoValidator.Impl
 
         public void AddProfile(Assembly assemblyToScan) => AddProfiles(new[] { assemblyToScan });
 
-        public void AddProfiles(IEnumerable<Assembly> assembliesToScan)
-            => AddMaps(assembliesToScan);
+        public void AddProfiles(IEnumerable<Assembly> assembliesToScan) => AddMaps(assembliesToScan);
 
-        public void AssertConfigurationExpressionIsValid()
+        public List<ProfileExpressionValidationResult> GetConfigurationExpressionValidation()
         {
-            throw new NotImplementedException();
+            var list = new List<ProfileExpressionValidationResult>();
+            foreach (var profile in _profiles)
+            {
+                list.Add(profile.ValidateExpression());
+            }
+
+            return list;
         }
 
 

@@ -81,7 +81,9 @@ The example above validates the email address `myemail.com` for the property nam
  - [x] fix up Teamcity
  - [x] add unit tests to Teamcity
  - [x] write unit tests for all IValidatorExpressions
- - [ ] class validation and class expression validation assertion with error messages
+ - [x] class validation and class expression validation assertion with error messages
+ - [x] validation error messages need to be connected to the property name
+ - [ ] ValidationResult needs to be able to have multiple errors for each property
  - [ ] static autovalidator initializer for mapping
  - [ ] static autovalidator initializer for assert everything is valid.
  - [ ] be able to create expression and validate inline (without classValidator)

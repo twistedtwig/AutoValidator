@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoValidator.Interfaces;
 using AutoValidator.Models;
@@ -13,6 +14,8 @@ namespace AutoValidator.Impl
         {
             Constraints = new List<IObjectValidator<T>>();
         }
+
+        public Type SourceType => typeof(T);
 
         public ClassExpressionValidationResult ValidateExpression()
         {

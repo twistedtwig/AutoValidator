@@ -87,6 +87,6 @@ namespace AutoValidator.Tests
 
             // assert
             action.Should().NotThrow();
-        }
+        }        
     }
 }

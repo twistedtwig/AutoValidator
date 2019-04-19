@@ -23,11 +23,6 @@ namespace AutoValidator.Impl
             return result;
         }
 
-        public ProfileExpressionValidationResult ValidateExpression()
-        {
-            throw new NotImplementedException();
-        }
-
         public IMappingExpression<T> ForMember<TMember>(Expression<Func<T, TMember>> memberSelectorExpression, Expression<Func<TMember, IValidatorExpression, bool>> memberValidationExpression)
         {
             Constraints.Add(new ClassObjectValidator<T, TMember>(memberSelectorExpression, memberValidationExpression));

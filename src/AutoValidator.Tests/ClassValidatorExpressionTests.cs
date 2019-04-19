@@ -170,5 +170,18 @@ namespace AutoValidator.Tests
             // assert
             result.Should().BeTrue();
         }
+
+        [Test]
+
+        public void Ignore_Will_Always_Return_True()
+        {
+            // arrange
+            
+            // act
+            var result = _subject.Ignore();
+
+            // assert
+            result.Should().BeTrue();
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using AutoValidator.Models;
 
 namespace AutoValidator.Interfaces
 {
@@ -14,6 +15,6 @@ namespace AutoValidator.Interfaces
 
         void AddProfiles(IEnumerable<Assembly> assembliesToScan);
 
-        void AssertConfigurationExpressionIsValid();
+        List<ProfileExpressionValidationResult> GetConfigurationExpressionValidation();
     }
 }

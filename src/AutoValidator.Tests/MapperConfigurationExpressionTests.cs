@@ -34,6 +34,26 @@ namespace AutoValidator.Tests
 
         [Test]
 
+        public void Add_Profile_By_Assembly_Is_Stored()
+        {
+            // arrange
+            _subject.Profiles.Should().BeEmpty();
+
+            // act
+            _subject.AddProfile(System.Reflection.Assembly.GetExecutingAssembly());
+
+            // assert
+            _subject.Profiles.Should().Contain(x => x.GetType() == typeof(DuplicateMappingProfile));
+            _subject.Profiles.Should().Contain(x => x.GetType() == typeof(MissingMappingProfile));
+            _subject.Profiles.Should().Contain(x => x.GetType() == typeof(MultipleMappingErrorsProfile));
+            _subject.Profiles.Should().Contain(x => x.GetType() == typeof(MultipleMappingsProfile));
+            _subject.Profiles.Should().Contain(x => x.GetType() == typeof(MultipleMappingsWithErrorsProfile));
+            _subject.Profiles.Should().Contain(x => x.GetType() == typeof(Profile1));
+            _subject.Profiles.Should().Contain(x => x.GetType() == typeof(Profile2));
+        }
+
+        [Test]
+
         public void Add_Multiple_Profiles_By_Instance_Are_Stored()
         {
             // arrange
@@ -294,6 +314,38 @@ namespace AutoValidator.Tests
             var error3 = model2Expression.Errors.Single(x => x.PropertyName == "Category");
             error2.Error.Should().Be("Missing mapping for property 'Number'");
             error3.Error.Should().Be("Duplicate mapping for property 'Category'");            
+        }
+
+        [Test]
+
+        public void Valid_Profiles_Have_Been_Added_Is_Valid()
+        {
+            // arrange
+            _subject.AddProfile<MultipleMappingsProfile>();
+            _subject.AddProfile<Profile1>();
+
+            // act
+            var result = _subject.GetConfigurationExpressionValidation();
+
+            // assert
+            result.All(v => v.Success).Should().BeTrue();
+        }
+
+
+        [Test]
+
+        public void InValid_Profiles_Have_Been_Added_Is_Not_Valid()
+        {
+            // arrange
+            _subject.AddProfile<MultipleMappingsProfile>();
+            _subject.AddProfile<Profile1>();
+            _subject.AddProfile<DuplicateMappingProfile>();
+
+            // act
+            var result = _subject.GetConfigurationExpressionValidation();
+
+            // assert
+            result.All(v => v.Success).Should().BeFalse();
         }
     }
 }

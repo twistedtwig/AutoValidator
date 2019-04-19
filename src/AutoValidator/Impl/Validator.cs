@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using AutoValidator.Constants;
 using AutoValidator.Interfaces;
 using AutoValidator.Models;
 
@@ -8,11 +7,13 @@ namespace AutoValidator.Impl
 {
     public class Validator : IValidator
     {
+        private readonly ValidationExpressionErrorMessageFactory _errorMessageFactory;
         private readonly ClassValidatorExpression _expressionValidator;
         private readonly Dictionary<string, string> _errors;
 
         public Validator()
         {
+            _errorMessageFactory = new ValidationExpressionErrorMessageFactory();
             _expressionValidator = new ClassValidatorExpression();
             _errors = new Dictionary<string, string>();
         }
@@ -36,8 +37,9 @@ namespace AutoValidator.Impl
 
             if (!valid)
             {
-                LogError(propName, message ?? ValidationMessageConstStrings.InvalidEmail);
+                var result = _errorMessageFactory.Get<string>((val, exp) => exp.IsEmailAddress(email, message), propName);
 
+                LogError(propName, result);
             }
 
             return this;
@@ -47,7 +49,9 @@ namespace AutoValidator.Impl
         {
             if (!_expressionValidator.NotNullOrEmpty(text))
             {
-                LogError(propName, string.Format(message ?? ValidationMessageConstStrings.StringNotNullOrEmpty, propName));
+                var result = _errorMessageFactory.Get<string>((val, exp) => exp.NotNullOrEmpty(text, message), propName);
+
+                LogError(propName, result);
             }
 
             return this;
@@ -57,7 +61,9 @@ namespace AutoValidator.Impl
         {
             if (!_expressionValidator.MinLength(text, minLength, message))
             {
-                LogError(propName, string.Format(message ?? ValidationMessageConstStrings.StringMinLength, minLength, propName));
+                var result = _errorMessageFactory.Get<string>((val, exp) => exp.MinLength(text, minLength, message), propName);
+
+                LogError(propName, result);
             }
 
             return this;
@@ -67,7 +73,9 @@ namespace AutoValidator.Impl
         {
             if (!_expressionValidator.MaxLength(text, maxLength, message))
             {
-                LogError(propName, string.Format(message ?? ValidationMessageConstStrings.StringMaxLength, maxLength, propName));
+                var result = _errorMessageFactory.Get<string>((val, exp) => exp.MaxLength(text, maxLength, message), propName);
+
+                LogError(propName, result);
             }
 
             return this;
@@ -76,17 +84,19 @@ namespace AutoValidator.Impl
         public IValidator MinValue(int value, int min, string propName, string message = null)
         {
             if (!_expressionValidator.MinValue(value, min, message))
-            {
-                LogError(propName, string.Format(message ?? ValidationMessageConstStrings.IntMinValue, min, propName));
+            {                
+                var result = _errorMessageFactory.Get<int>((val, exp) => exp.MinValue(val, 111, message), propName);
+
+                LogError(propName, result);
             }
 
             return this;
         }
 
-        private void LogError(string propName, string message)
+        private void LogError(string propName, Tuple<string, List<object>> messageValue)
         {
             EnsureUniquePropName(propName);
-            _errors.Add(propName, message);
+            _errors.Add(propName, string.Format(messageValue.Item1, messageValue.Item2.ToArray()));
         }
 
         private void EnsureUniquePropName(string name)

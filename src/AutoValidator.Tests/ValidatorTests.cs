@@ -156,6 +156,20 @@ namespace AutoValidator.Tests
 
         [Test]
 
+        public void string_Max_Length_String_valid()
+        {
+            // arrange
+
+            // act
+            var result = _subject.MaxLength("test", 4, "value").Validate();
+
+            // assert
+            result.Success.Should().BeTrue();
+            result.Errors.Keys.Count.Should().Be(0);
+        }
+
+        [Test]
+
         public void Too_Short_string_Min_Length_String_Not_Valid()
         {
             // arrange
@@ -192,6 +206,7 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeFalse();
+            result.Errors["val"].Should().Be("val should be at least 3");
         }
 
         [Test]
@@ -218,6 +233,6 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeTrue();
-        }
+        }        
     }
 }

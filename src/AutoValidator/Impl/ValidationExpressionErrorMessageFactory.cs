@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Reflection;
 using AutoValidator.Constants;
 using AutoValidator.Interfaces;
 
@@ -10,8 +12,6 @@ namespace AutoValidator.Impl
     {
         public Tuple<string, List<object>> Get<TMember>(Expression<Func<TMember, IValidatorExpression, bool>> exp, string propName)
         {
-            //TODO for each method name, collect up all variables and put in list and find the correct error message format string / override.
-
             var methodCall = exp.Body as MethodCallExpression;
             var methodSignature = methodCall.Method.ToString();
 
@@ -73,19 +73,18 @@ namespace AutoValidator.Impl
 
         private object GetArgumentValue(Expression methodExpression)
         {
-            var constExp = methodExpression as ConstantExpression;
-            return constExp?.Value;
-        }
+            if (methodExpression.NodeType == ExpressionType.MemberAccess)
+            {
+                var memberExpression = (MemberExpression)methodExpression;
+                return GetArgumentValue(memberExpression.Expression);
+            }
+            else if (methodExpression.NodeType == ExpressionType.Constant)
+            {
+                var constExp = methodExpression as ConstantExpression;
+                return constExp?.Value;
+            }
 
-        public string Get(string value, string propName, object[] values)
-        {
-            // TODO do the same as above
-
-            // Get calling method name
-            //Console.WriteLine(stackTrace.GetFrame(1).GetMethod().Name);
-
-            // from calling method name can figure out the expression and call into same structure as above.
-            throw new NotImplementedException();
-        }
+            throw new ArgumentOutOfRangeException("Unknown expression argument type");
+        }        
     }
 }
