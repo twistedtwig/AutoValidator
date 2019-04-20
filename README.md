@@ -83,23 +83,21 @@ The example above validates the email address `myemail.com` for the property nam
  - [x] write unit tests for all IValidatorExpressions
  - [x] class validation and class expression validation assertion with error messages
  - [x] validation error messages need to be connected to the property name
- - [ ] ValidationResult needs to be able to have multiple errors for each property
- - [ ] static autovalidator initializer for mapping
- - [ ] static autovalidator initializer for assert everything is valid.
+ - [ ] ValidationResult needs to be able to have multiple errors for each property, should have an array of errors as well as a nicely formatted string represntation.
  - [ ] be able to create expression and validate inline (without classValidator)
- - [ ] classValidator creation finds mapping and adds expressions
- - [ ] create configuration object for validation schema
+ - [x] classValidator creation finds mapping and adds expressions
+ - [x] create configuration object for validation schema
  - [x] configuration setup to allow add mappings from assemblies
  - [x] creating custom validation function
  - [ ] allow global CreateMap to be defined in initial setup configuration
- - [ ] ensure all mappings are being saved
- - [ ] factory for class type to get instance of a validator with the defined mappings
+ - [x] ensure all mappings are being saved
+ - [x] factory for class type to get instance of a validator with the defined mappings
  - [ ] be able to use the mapping style in simple validation process
  - [ ] have the ability to clear validation rules for T (only within that instance of a validator)
- - [ ] should be able to have multiple validator errors for one prop
- - [ ] multiple validation errors for one prop should have an array of errors as well as a nicely formatted string represntation.
  - [ ] custom expression error message string format options
  - [ ] standard expression error message string format options
  - [ ] test error message override in classValidator, regular string validator and regular fluent validator
+ - [ ] create basic start up guide at beginning of readme
+ - [ ] create wiki pages for more complex stuff and link to each from readme and home of wiki
  - [ ] add more IValidatorExpression functions
 
