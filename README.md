@@ -1,3 +1,7 @@
+<a href="http://home.houseofhawkins.com:8080/viewType.html?buildTypeId=AutoValidator&guest=1">
+<img src="http://home.houseofhawkins.com:8080/app/rest/builds/buildType:(id:AutoValidator)/statusIcon"/>
+</a>
+
 # AutoValidator
 
 ## GOAL
