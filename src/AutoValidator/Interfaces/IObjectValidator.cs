@@ -4,6 +4,7 @@
     {
         string ErrorMessage { get; }
         string PropName { get; }
+        string FunctionDescription { get;  }
         bool Validate(T obj);
 
     }

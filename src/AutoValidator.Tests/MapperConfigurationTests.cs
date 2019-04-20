@@ -36,7 +36,7 @@ namespace AutoValidator.Tests
         {
             // arrange
             var expression = new MapperConfigurationExpression();
-            expression.AddProfile<DuplicateMappingProfile>();
+            expression.AddProfile<DuplicateInvalidMappingProfile>();
             expression.AddProfile<MissingMappingProfile>();
 
             _subject = new MapperConfiguration(expression);
@@ -48,7 +48,7 @@ namespace AutoValidator.Tests
             catch (ConfigurationExpressionException ex)
             {
                 ex.Errors.ToList().Count.Should().Be(2);
-                ex.Errors.Should().Contain(e => e.ProfileType == typeof(DuplicateMappingProfile));
+                ex.Errors.Should().Contain(e => e.ProfileType == typeof(DuplicateInvalidMappingProfile));
                 ex.Errors.Should().Contain(e => e.ProfileType == typeof(MissingMappingProfile));
             }
         }
@@ -59,7 +59,7 @@ namespace AutoValidator.Tests
         {
             // arrange
             var expression = new MapperConfigurationExpression();
-            expression.AddProfile<DuplicateMappingProfile>();
+            expression.AddProfile<DuplicateInvalidMappingProfile>();
             expression.AddProfile<MissingMappingProfile>();
             expression.AddProfile<Profile1>();
 
@@ -72,7 +72,7 @@ namespace AutoValidator.Tests
             catch (ConfigurationExpressionException ex)
             {
                 ex.Errors.ToList().Count.Should().Be(2);
-                ex.Errors.Should().Contain(e => e.ProfileType == typeof(DuplicateMappingProfile));
+                ex.Errors.Should().Contain(e => e.ProfileType == typeof(DuplicateInvalidMappingProfile));
                 ex.Errors.Should().Contain(e => e.ProfileType == typeof(MissingMappingProfile));
             }
         }
@@ -102,7 +102,7 @@ namespace AutoValidator.Tests
             // arrange
             Action<IMapperConfigurationExpression> configure = cfg =>
             {
-                cfg.AddProfile<DuplicateMappingProfile>();
+                cfg.AddProfile<DuplicateInvalidMappingProfile>();
                 cfg.AddProfile<MissingMappingProfile>();
             };
 
@@ -115,7 +115,7 @@ namespace AutoValidator.Tests
             catch (ConfigurationExpressionException ex)
             {
                 ex.Errors.ToList().Count.Should().Be(2);
-                ex.Errors.Should().Contain(e => e.ProfileType == typeof(DuplicateMappingProfile));
+                ex.Errors.Should().Contain(e => e.ProfileType == typeof(DuplicateInvalidMappingProfile));
                 ex.Errors.Should().Contain(e => e.ProfileType == typeof(MissingMappingProfile));
             }
         }
@@ -127,7 +127,7 @@ namespace AutoValidator.Tests
             // arrange
             Action<IMapperConfigurationExpression> configure = cfg =>
             {
-                cfg.AddProfile<DuplicateMappingProfile>();
+                cfg.AddProfile<DuplicateInvalidMappingProfile>();
                 cfg.AddProfile<MissingMappingProfile>();
                 cfg.AddProfile<Profile1>();
             };
@@ -141,7 +141,7 @@ namespace AutoValidator.Tests
             catch (ConfigurationExpressionException ex)
             {
                 ex.Errors.ToList().Count.Should().Be(2);
-                ex.Errors.Should().Contain(e => e.ProfileType == typeof(DuplicateMappingProfile));
+                ex.Errors.Should().Contain(e => e.ProfileType == typeof(DuplicateInvalidMappingProfile));
                 ex.Errors.Should().Contain(e => e.ProfileType == typeof(MissingMappingProfile));
             }
         }

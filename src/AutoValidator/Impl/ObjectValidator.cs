@@ -12,9 +12,11 @@ namespace AutoValidator.Impl
 
         public string ErrorMessage { get; }
         public string PropName { get; }
+        public string FunctionDescription { get; }
 
         public ObjectValidator(Expression<Func<T, TMember>> memberSelectorExpression, Func<TMember, bool> memberValidation, string errorMessage)
         {
+            FunctionDescription = memberValidation.ToString();
             var memberInfo = ReflectionHelper.FindProperty(memberSelectorExpression);
             PropName = memberInfo.Name;
             _memberSelector = memberSelectorExpression.Compile();

@@ -34,9 +34,12 @@ namespace AutoValidator.Impl
 
             var result = new ProfileExpressionValidationResult(GetType())
             {
-                Success = expressionMappings.All(x => x.Success),
-                ExpressionResults = expressionMappings
+                Success = expressionMappings.All(x => x.Success),                
             };
+            if (!result.Success)
+            {
+                result.ExpressionResults = expressionMappings;
+            }
 
             return result;
         }

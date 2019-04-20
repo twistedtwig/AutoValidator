@@ -201,9 +201,7 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeTrue();
-            result.ExpressionResults.Count.Should().Be(1);
-            result.ExpressionResults[0].Success.Should().BeTrue();
-            result.ExpressionResults[0].Errors.Count.Should().Be(0);
+            result.ExpressionResults.Count.Should().Be(0);
         }
 
         [Test]
@@ -218,9 +216,7 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeTrue();
-            result.ExpressionResults.Count.Should().Be(1);
-            result.ExpressionResults[0].Success.Should().BeTrue();
-            result.ExpressionResults[0].Errors.Count.Should().Be(0);
+            result.ExpressionResults.Count.Should().Be(0);
         }
 
         [Test]
@@ -245,9 +241,23 @@ namespace AutoValidator.Tests
 
         [Test]
 
-        public void Profile_With_Duplicate_Member_Mapping_Is_Not_Valid()
+        public void Profile_With_Duplicate_Member_Mapping_IsValid()
         { // arrange
             var profile = new DuplicateMappingProfile();
+
+            // act
+            var result = profile.ValidateExpression();
+
+            // assert
+            result.Success.Should().BeTrue();
+            result.ExpressionResults.Count.Should().Be(0);
+        }
+
+        [Test]
+
+        public void Profile_With_Duplicate_Member_And_Same_Expression_Mapping_Is_Not_Valid()
+        { // arrange
+            var profile = new DuplicateInvalidMappingProfile();
 
             // act
             var result = profile.ValidateExpression();
@@ -262,6 +272,7 @@ namespace AutoValidator.Tests
             var error = model1Expression.Errors.Single(x => x.PropertyName == "Age");
             error.Error.Should().Be("Duplicate mapping for property 'Age'");
         }
+       
 
         [Test]
 
@@ -339,7 +350,7 @@ namespace AutoValidator.Tests
             // arrange
             _subject.AddProfile<MultipleMappingsProfile>();
             _subject.AddProfile<Profile1>();
-            _subject.AddProfile<DuplicateMappingProfile>();
+            _subject.AddProfile<DuplicateInvalidMappingProfile>();
 
             // act
             var result = _subject.GetConfigurationExpressionValidation();

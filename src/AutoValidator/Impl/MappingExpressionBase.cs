@@ -24,14 +24,18 @@ namespace AutoValidator.Impl
             var objType = typeof(T);
             var propNames = objType.GetProperties().Select(p =>  p.Name).ToList();
 
-            var constraintPropNames = Constraints.Select(x => x.PropName).ToList();
-            var constraintPropNameCount = constraintPropNames.GroupBy(s => s);
+            var constraintPropNames = Constraints.Select(x => x.PropName).Distinct().ToList();
 
-            foreach (var nameCount in constraintPropNameCount)
+            var constraintGroups = Constraints.GroupBy(c => c.PropName);
+            foreach (var constraintGroup in constraintGroups)
             {
-                if (nameCount.Count() > 1)
+                var funcGroups = constraintGroup.Select(c => c.FunctionDescription).GroupBy(cg => cg);
+                foreach (var funcGroup in funcGroups)
                 {
-                    result.Errors.Add(new ExpressionValidationPropertyError(nameCount.Key, $"Duplicate mapping for property '{nameCount.Key}'"));
+                    if (funcGroup.Count() > 1)
+                    {
+                        result.Errors.Add(new ExpressionValidationPropertyError(constraintGroup.Key, $"Duplicate mapping for property '{constraintGroup.Key}'"));
+                    }
                 }
             }
 

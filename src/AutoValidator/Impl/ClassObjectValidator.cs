@@ -13,6 +13,7 @@ namespace AutoValidator.Impl
         private readonly IValidatorExpression _validatorExpression;
 
         public string PropName { get; }
+        public string FunctionDescription { get; }
         public string ErrorMessage { get; private set; }
 
         private readonly string _errorMessageFormat;
@@ -21,6 +22,8 @@ namespace AutoValidator.Impl
         public ClassObjectValidator(Expression<Func<T, TMember>> memberSelectorExpression, Expression<Func<TMember, IValidatorExpression, bool>> memberValidationFunc)
         {
             var memberExp = memberValidationFunc;
+            var funcStr = memberValidationFunc.Body.ToString();
+            FunctionDescription = funcStr.Substring(0, funcStr.IndexOf("("));
 
             var memberInfo = ReflectionHelper.FindProperty(memberSelectorExpression);
             PropName = memberInfo.Name;
