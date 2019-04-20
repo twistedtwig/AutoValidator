@@ -85,7 +85,7 @@ namespace AutoValidator.Impl
         {
             if (!_expressionValidator.MinValue(value, min, message))
             {                
-                var result = _errorMessageFactory.Get<int>((val, exp) => exp.MinValue(val, 111, message), propName);
+                var result = _errorMessageFactory.Get<int>((val, exp) => exp.MinValue(val, min, message), propName);
 
                 LogError(propName, result);
             }

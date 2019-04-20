@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq.Expressions;
-using System.Reflection;
 using AutoValidator.Constants;
+using AutoValidator.Helpers;
 using AutoValidator.Interfaces;
 
 namespace AutoValidator.Impl
@@ -73,18 +72,11 @@ namespace AutoValidator.Impl
 
         private object GetArgumentValue(Expression methodExpression)
         {
-            if (methodExpression.NodeType == ExpressionType.MemberAccess)
-            {
-                var memberExpression = (MemberExpression)methodExpression;
-                return GetArgumentValue(memberExpression.Expression);
-            }
-            else if (methodExpression.NodeType == ExpressionType.Constant)
-            {
-                var constExp = methodExpression as ConstantExpression;
-                return constExp?.Value;
-            }
+            var visitor = new ValueExtractor();
+            visitor.Visit(methodExpression);
 
-            throw new ArgumentOutOfRangeException("Unknown expression argument type");
+            var args = visitor.Arguments;
+            return args.Count > 0 ? args[0] : null;
         }        
     }
 }
