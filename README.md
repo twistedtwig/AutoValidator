@@ -20,9 +20,9 @@ the validation schema process is heavily guided by [AutoMapper](https://github.c
 
 ## Getting Started
 
-If you simply want to validate individual variables simply create an instance of `Validator`.
+If you just want to validate individual variables, simply create an instance of `Validator`.
 
-If you wish to use schema validation, first create an instance of `MapperConfiguration`, define the `MapperConfigurationExpression` then create a factory to create instance of validators.
+If you wish to use schema validation; first create an instance of `MapperConfiguration`, define the `MapperConfigurationExpression` then create a factory to create instance of validators.
 
 ```c#
 var mapper = new MapperConfiguration();
@@ -37,6 +37,8 @@ var factory =  mapper.CreateFactory();
 
 var validator = factory.Create<ModelToBeValidated>();
 ```
+
+You only need to create one instance of the mapper, its configuration and the factory.  Then use the factory instance to create new instances of the validator as required.
 
 For further information about [configuration and setup](https://github.com/twistedtwig/AutoValidator/wiki/Mapper-Configuration-Setup)
 
@@ -70,6 +72,7 @@ For a fuller explaination see, [Details on how to use the validators](https://gi
  ## Further Reading
 
  - [Mapper Configuration and Mapper Configuration Expressions](https://github.com/twistedtwig/AutoValidator/wiki/Mapper-Configuration-Setup)
+ - [Example of how you could use AutoValidator in a DI framework](https://github.com/twistedtwig/AutoValidator/wiki/Dependency-injection-suggestion)
  - [Schema Validation](https://github.com/twistedtwig/AutoValidator/wiki/Validation-Schemas)
  - [Validators](https://github.com/twistedtwig/AutoValidator/wiki/Validator-usage)
  - [Validation Result Object](https://github.com/twistedtwig/AutoValidator/wiki/Validator-Results)
@@ -98,4 +101,5 @@ For a fuller explaination see, [Details on how to use the validators](https://gi
  - [ ] create basic start up guide at beginning of readme
  - [ ] create wiki pages for more complex stuff and link to each from readme and home of wiki
  - [ ] add more IValidatorExpression functions
+ - [ ] add DI example code to https://github.com/twistedtwig/AutoValidator/wiki/Dependency-injection-suggestion for autofac func setup
 

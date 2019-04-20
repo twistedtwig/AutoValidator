@@ -244,5 +244,27 @@ namespace AutoValidator.Tests
             validationResult.Should().NotBeNull();
             validationResult.Success.Should().BeTrue();
         }
+        
+        [Test]
+
+        public void Create_Factory_Action_Will_Return_New_Instance_Each_Time()
+        {
+            Action<IMapperConfigurationExpression> configure = cfg =>
+            {
+                cfg.AddProfile<Profile2>();
+                cfg.AddProfile<Profile2>();
+            };
+
+            _subject = new MapperConfiguration(configure);
+
+            // act
+            var factoryFunc = _subject.CreateFactoryFunc();
+
+            var factory1 = factoryFunc();
+            var factory2 = factoryFunc();
+
+            // assert
+            factory1.Equals(factory2).Should().BeFalse();
+        }
     }
 }
