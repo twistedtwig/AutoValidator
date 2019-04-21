@@ -22,6 +22,10 @@ the validation schema process is heavily guided by [AutoMapper](https://github.c
 
 If you just want to validate individual variables, simply create an instance of `Validator`.
 
+ ```c#
+ var validator = new Validator();
+ ```
+
 If you wish to use schema validation; first create an instance of `MapperConfiguration`, define the `MapperConfigurationExpression` then create a factory to create instance of validators.
 
 ```c#
@@ -64,6 +68,17 @@ var result = validator.Validate(model);
  var validator = new Validator();
  var result = validator.IsEmailAddress(someVariable).Validate();
  ```
+ 
+validations can be used in a fluent fashion.  Only when `Validate()` is called are they checked and the validation result returned.
+
+### Fluent Validator
+ ```c#
+ var validator = new Validator();
+ var result = validator
+				.isMinValue(someInt, 18)
+				.IsEmailAddress(someVariable)
+				.Validate();
+ ```
 
 For a fuller explaination see, [Details on how to use the validators](https://github.com/twistedtwig/AutoValidator/wiki/Validator-usage)
 
@@ -103,4 +118,5 @@ For a fuller explaination see, [Details on how to use the validators](https://gi
  - [ ] create wiki pages for more complex stuff and link to each from readme and home of wiki
  - [ ] add more IValidatorExpression functions
  - [ ] add DI example code to https://github.com/twistedtwig/AutoValidator/wiki/Dependency-injection-suggestion for autofac func setup
+ - [ ] create examples for usage
 
