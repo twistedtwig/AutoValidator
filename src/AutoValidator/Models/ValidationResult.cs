@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AutoValidator.Helpers;
 
 namespace AutoValidator.Models
 {
@@ -6,21 +7,17 @@ namespace AutoValidator.Models
     {
         public ValidationResult()
         {
-            Errors = new Dictionary<string, string>();
+            Errors = new Dictionary<string, List<string>>();
         }
 
         public bool Success { get; set; }
-        public Dictionary<string, string> Errors { get; set; }
+        public Dictionary<string, List<string>> Errors { get; set; }
 
         public static ValidationResult SuccessResult => new ValidationResult {Success = true};
 
-        public static ValidationResult NullObjectResult => new ValidationResult
+        public void AddError(string propName, string errorMessage)
         {
-            Success = false,
-            Errors = new Dictionary<string, string>()
-            {
-                { "Object", "Null item passed to validator" }
-            }
-        };
+            Errors.AddItemToList(propName, errorMessage);
+        }
     }
 }

@@ -74,6 +74,7 @@ For a fuller explaination see, [Details on how to use the validators](https://gi
  - [Mapper Configuration and Mapper Configuration Expressions](https://github.com/twistedtwig/AutoValidator/wiki/Mapper-Configuration-Setup)
  - [Example of how you could use AutoValidator in a DI framework](https://github.com/twistedtwig/AutoValidator/wiki/Dependency-injection-suggestion)
  - [Schema Validation](https://github.com/twistedtwig/AutoValidator/wiki/Validation-Schemas)
+ - [Asserting Schema Valiadtion](https://github.com/twistedtwig/AutoValidator/wiki/Asserting-Schema-validation)
  - [Validators](https://github.com/twistedtwig/AutoValidator/wiki/Validator-usage)
  - [Validation Result Object](https://github.com/twistedtwig/AutoValidator/wiki/Validator-Results)
 
@@ -84,7 +85,7 @@ For a fuller explaination see, [Details on how to use the validators](https://gi
  - [x] write unit tests for all IValidatorExpressions
  - [x] class validation and class expression validation assertion with error messages
  - [x] validation error messages need to be connected to the property name
- - [ ] ValidationResult needs to be able to have multiple errors for each property, should have an array of errors as well as a nicely formatted string represntation.
+ - [x] ValidationResult needs to be able to have multiple errors for each property, should have an array of errors as well as a nicely formatted string represntation.
  - [ ] be able to create expression and validate inline (without classValidator)
  - [x] classValidator creation finds mapping and adds expressions
  - [x] create configuration object for validation schema
@@ -98,7 +99,7 @@ For a fuller explaination see, [Details on how to use the validators](https://gi
  - [ ] custom expression error message string format options
  - [ ] standard expression error message string format options
  - [ ] test error message override in classValidator, regular string validator and regular fluent validator
- - [ ] create basic start up guide at beginning of readme
+ - [x] create basic start up guide at beginning of readme
  - [ ] create wiki pages for more complex stuff and link to each from readme and home of wiki
  - [ ] add more IValidatorExpression functions
  - [ ] add DI example code to https://github.com/twistedtwig/AutoValidator/wiki/Dependency-injection-suggestion for autofac func setup

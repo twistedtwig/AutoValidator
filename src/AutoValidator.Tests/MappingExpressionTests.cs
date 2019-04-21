@@ -61,8 +61,10 @@ namespace AutoValidator.Tests
             result.Success.Should().BeFalse();
             result.Errors.Count.Should().Be(1);
 
-            result.Errors.ContainsKey("EmailAddress").Should().BeTrue();
-            result.Errors["EmailAddress"].Should().Be("m => m.EmailAddress did not pass validation");
+            result.Errors.Should().ContainKey("EmailAddress");
+            var emailError = result.Errors["EmailAddress"];
+            emailError.Count.Should().Be(1);
+            emailError.Should().Contain(e => e == "m => m.EmailAddress did not pass validation");
         }
 
         [Test]
@@ -90,11 +92,15 @@ namespace AutoValidator.Tests
             result.Success.Should().BeFalse();
             result.Errors.Count.Should().Be(2);
 
-            result.Errors.ContainsKey("EmailAddress").Should().BeTrue();
-            result.Errors["EmailAddress"].Should().Be("m => m.EmailAddress did not pass validation");
+            result.Errors.Should().ContainKey("EmailAddress");
+            var emailErrors = result.Errors["EmailAddress"];
+            emailErrors.Count.Should().Be(1);
+            emailErrors.Should().Contain(e => e == "m => m.EmailAddress did not pass validation");
 
-            result.Errors.ContainsKey("Number").Should().BeTrue();
-            result.Errors["Number"].Should().Be("m => m.Number did not pass validation");
+            result.Errors.Should().ContainKey("Number");
+            var numberErrors = result.Errors["Number"];
+            numberErrors.Count.Should().Be(1);
+            numberErrors.Should().Contain(e => e == "m => m.Number did not pass validation");
         }
 
         [Test]
@@ -136,11 +142,15 @@ namespace AutoValidator.Tests
             result2.Success.Should().BeFalse();
             result2.Errors.Count.Should().Be(2);
 
-            result2.Errors.ContainsKey("EmailAddress").Should().BeTrue();
-            result2.Errors["EmailAddress"].Should().Be("m => m.EmailAddress did not pass validation");
+            result2.Errors.Should().ContainKey("EmailAddress");
+            var emailErrors = result2.Errors["EmailAddress"];
+            emailErrors.Count.Should().Be(1);
+            emailErrors.Should().Contain(e => e == "m => m.EmailAddress did not pass validation");
 
-            result2.Errors.ContainsKey("Number").Should().BeTrue();
-            result2.Errors["Number"].Should().Be("m => m.Number did not pass validation");
+            result2.Errors.Should().ContainKey("Number");
+            var numberErrors = result2.Errors["Number"];
+            numberErrors.Count.Should().Be(1);
+            numberErrors.Should().Contain(e => e == "m => m.Number did not pass validation");
 
             result3.Should().NotBeNull();
             result3.Success.Should().BeTrue();
@@ -213,9 +223,10 @@ namespace AutoValidator.Tests
             var result = expression.Validate(model);
 
             // assert
-            result.Success.Should().BeFalse();
-            result.Errors.ContainsKey("Name").Should().BeTrue();
-            result.Errors["Name"].Should().Be("Name should not be longer than 3");
+            result.Errors.Should().ContainKey("Name");
+            var nameErrors = result.Errors["Name"];
+            nameErrors.Count.Should().Be(1);
+            nameErrors.Should().Contain(e => e == "Name should not be longer than 3");
         }
 
         [Test]
@@ -237,9 +248,10 @@ namespace AutoValidator.Tests
             var result = expression.Validate(model);
 
             // assert
-            result.Success.Should().BeFalse();
-            result.Errors.ContainsKey("Name").Should().BeTrue();
-            result.Errors["Name"].Should().Be("3 custom error Name Jon Hawkins");
+            result.Errors.Should().ContainKey("Name");
+            var nameErrors = result.Errors["Name"];
+            nameErrors.Count.Should().Be(1);
+            nameErrors.Should().Contain(e => e == "3 custom error Name Jon Hawkins");
         }
 
         [Test]
@@ -260,9 +272,10 @@ namespace AutoValidator.Tests
             var result = expression.Validate(model);
 
             // assert
-            result.Success.Should().BeFalse();
-            result.Errors.ContainsKey("Name").Should().BeTrue();
-            result.Errors["Name"].Should().Be("Name must be at least 4444");
+            result.Errors.Should().ContainKey("Name");
+            var nameErrors = result.Errors["Name"];
+            nameErrors.Count.Should().Be(1);
+            nameErrors.Should().Contain(e => e == "Name must be at least 4444");
         }
 
         [Test]
@@ -283,9 +296,10 @@ namespace AutoValidator.Tests
             var result = expression.Validate(model);
 
             // assert
-            result.Success.Should().BeFalse();
-            result.Errors.ContainsKey("Name").Should().BeTrue();
-            result.Errors["Name"].Should().Be("4444 - Name - Jon Hawkins");
+            result.Errors.Should().ContainKey("Name");
+            var nameErrors = result.Errors["Name"];
+            nameErrors.Count.Should().Be(1);
+            nameErrors.Should().Contain(e => e == "4444 - Name - Jon Hawkins");
         }
 
         [Test]
@@ -345,8 +359,10 @@ namespace AutoValidator.Tests
             var result = expression.Validate(model);
 
             // assert
-            result.Success.Should().BeFalse();
-            result.Errors["Name"].Should().Be("Name can't be null or empty");
+            result.Errors.Should().ContainKey("Name");
+            var nameErrors = result.Errors["Name"];
+            nameErrors.Count.Should().Be(1);
+            nameErrors.Should().Contain(e => e == "Name can't be null or empty");
         }
 
         [Test]
@@ -364,8 +380,10 @@ namespace AutoValidator.Tests
             var result = expression.Validate(model);
 
             // assert
-            result.Success.Should().BeFalse();
-            result.Errors["Name"].Should().Be("Test Name Test");
+            result.Errors.Should().ContainKey("Name");
+            var nameErrors = result.Errors["Name"];
+            nameErrors.Count.Should().Be(1);
+            nameErrors.Should().Contain(e => e == "Test Name Test");
         }
 
         [Test]
@@ -402,7 +420,10 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeFalse();
-            result.Errors["Name"].Should().Be("Invalid Email");
+            result.Errors.Should().ContainKey("Name");
+            var nameErrors = result.Errors["Name"];
+            nameErrors.Count.Should().Be(1);
+            nameErrors.Should().Contain(e => e == "Invalid Email");
         }
 
         [Test]
@@ -421,7 +442,10 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeFalse();
-            result.Errors["Name"].Should().Be("Name != email 'a.com'");
+            result.Errors.Should().ContainKey("Name");
+            var nameErrors = result.Errors["Name"];
+            nameErrors.Count.Should().Be(1);
+            nameErrors.Should().Contain(e => e == "Name != email 'a.com'");
         }
 
         [Test]
@@ -455,7 +479,10 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeFalse();
-            result.Errors["Number"].Should().Be("Number should be at least 11");
+            result.Errors.Should().ContainKey("Number");
+            var errors = result.Errors["Number"];
+            errors.Count.Should().Be(1);
+            errors.Should().Contain(e => e == "Number should be at least 11");
         }
 
         [Test]
@@ -504,7 +531,10 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeFalse();
-            result.Errors["Number"].Should().Be("Test 11 should be more than Number 10");
+            result.Errors.Should().ContainKey("Number");
+            var nameErrors = result.Errors["Number"];
+            nameErrors.Count.Should().Be(1);
+            nameErrors.Should().Contain(e => e == "Test 11 should be more than Number 10");
         }
 
     }

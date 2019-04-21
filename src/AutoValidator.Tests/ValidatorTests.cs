@@ -28,7 +28,10 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeFalse();
-            result.Errors["email"].Should().Be("Invalid Email");
+            result.Errors.Should().ContainKey("email");
+            var nameErrors = result.Errors["email"];
+            nameErrors.Count.Should().Be(1);
+            nameErrors.Should().Contain(e => e == "Invalid Email");
         }
 
 
@@ -59,7 +62,11 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeFalse();
-            result.Errors["test"].Should().Be("test can't be null or empty");
+
+            result.Errors.Should().ContainKey("test");
+            var errors = result.Errors["test"];
+            errors.Count.Should().Be(1);
+            errors.Should().Contain(e => e == "test can't be null or empty");
         }
 
         [Test]
@@ -73,7 +80,11 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeFalse();
-            result.Errors["test"].Should().Be("test can't be null or empty");
+
+            result.Errors.Should().ContainKey("test");
+            var errors = result.Errors["test"];
+            errors.Count.Should().Be(1);
+            errors.Should().Contain(e => e == "test can't be null or empty");
         }
 
         [Test]
@@ -87,23 +98,11 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeFalse();
-            result.Errors["test"].Should().Be("test can't be null or empty");
-        }
 
-        [Test]
-
-        public void Using_Same_Propname_Twice_Causes_Error()
-        {
-            // arrange
-
-            // act
-            Action action = () => _subject
-                .NotNullOrEmpty(" ", "test")
-                .NotNullOrEmpty(" ", "test")
-                .Validate();
-
-            // assert
-            action.Should().Throw<ArgumentException>().WithMessage("key 'test' has already been used and errored");
+            result.Errors.Should().ContainKey("test");
+            var errors = result.Errors["test"];
+            errors.Count.Should().Be(1);
+            errors.Should().Contain(e => e == "test can't be null or empty");
         }
         
         [Test]
@@ -136,8 +135,16 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeFalse();
-            result.Errors["test"].Should().Be("test can't be null or empty");
-            result.Errors["short"].Should().Be("short should not be longer than 2");
+
+            result.Errors.Should().ContainKey("test");
+            var testErrors = result.Errors["test"];
+            testErrors.Count.Should().Be(1);
+            testErrors.Should().Contain(e => e == "test can't be null or empty");
+
+            result.Errors.Should().ContainKey("short");
+            var errors = result.Errors["short"];
+            errors.Count.Should().Be(1);
+            errors.Should().Contain(e => e == "short should not be longer than 2");
         }
 
         [Test]
@@ -151,7 +158,11 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeFalse();
-            result.Errors["value"].Should().Be("value should not be longer than 3");
+
+            result.Errors.Should().ContainKey("value");
+            var errors = result.Errors["value"];
+            errors.Count.Should().Be(1);
+            errors.Should().Contain(e => e == "value should not be longer than 3");
         }
 
         [Test]
@@ -179,7 +190,11 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeFalse();
-            result.Errors["test"].Should().Be("test must be at least 3");
+
+            result.Errors.Should().ContainKey("test");
+            var errors = result.Errors["test"];
+            errors.Count.Should().Be(1);
+            errors.Should().Contain(e => e == "test must be at least 3");
         }
 
         [Test]
@@ -206,7 +221,11 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeFalse();
-            result.Errors["val"].Should().Be("val should be at least 3");
+
+            result.Errors.Should().ContainKey("val");
+            var errors = result.Errors["val"];
+            errors.Count.Should().Be(1);
+            errors.Should().Contain(e => e == "val should be at least 3");
         }
 
         [Test]
@@ -233,6 +252,36 @@ namespace AutoValidator.Tests
 
             // assert
             result.Success.Should().BeTrue();
-        }        
+        }
+
+        [Test]
+
+        public void Multiple_Errors_On_A_Property_Show_In_Validation_Error()
+        {
+            // arrange
+            
+            // act
+            var result = _subject
+                .MinLength("text", 5, "Name")
+                .MaxLength("text", 3, "Name")
+                .MinValue(10, 5, "Age")
+                .NotNullOrEmpty("", "Test")
+                .Validate();
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.Errors.Should().ContainKey("Name");
+            result.Errors.Should().ContainKey("Test");
+
+            var nameErrors = result.Errors["Name"];
+            var testErrors = result.Errors["Test"];
+
+            nameErrors.Count.Should().Be(2);
+            nameErrors.Should().Contain(e => e == "Name must be at least 5");
+            nameErrors.Should().Contain(e => e == "Name should not be longer than 3");
+
+            testErrors.Count.Should().Be(1);
+            testErrors.Should().Contain(e => e == "Test can't be null or empty");
+        }
     }
 }

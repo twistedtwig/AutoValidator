@@ -16,7 +16,7 @@ namespace AutoValidator.Impl
                 if(!constraint.Validate(obj))
                 {
                     result.Success = false;
-                    result.Errors.Add(constraint.PropName, constraint.ErrorMessage);
+                    result.AddError(constraint.PropName, constraint.ErrorMessage);
                 }
             }
 

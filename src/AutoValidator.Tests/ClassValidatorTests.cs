@@ -56,8 +56,45 @@ namespace AutoValidator.Tests
             // assert
             result.Success.Should().BeFalse();
             result.Errors.Count.Should().Be(2);
-            result.Errors["Name"].Should().Be("Name can't be null or empty");
-            result.Errors["Age"].Should().Be("Age should be at least 18");
+
+            result.Errors.Should().ContainKey("Name");
+            var nameErrors = result.Errors["Name"];
+            nameErrors.Count.Should().Be(1);
+            nameErrors.Should().Contain(e => e == "Name can't be null or empty");
+
+            result.Errors.Should().ContainKey("Age");
+            var ageErrors = result.Errors["Age"];
+            ageErrors.Count.Should().Be(1);
+            ageErrors.Should().Contain(e => e == "Age should be at least 18");            
+        }
+
+        [Test]
+
+        public void Multiple_Errors_On_A_Property_Show_In_Validation_Error()
+        {
+            // arrange
+            var profile = new DuplicateMappingProfile();
+
+            var model = new Model1
+            {
+                Age = 18,
+                Name = "test"
+            };
+
+            _validator = new ClassValidator<Model1>(profile.MappingExpressions.OfType<IMappingExpression<Model1>>().Single());
+
+
+            // act
+            var result = _validator.Validate(model);
+
+            // assert
+            result.Success.Should().BeFalse();
+
+            result.Errors.Should().ContainKey("Name");
+            var nameErrors = result.Errors["Name"];
+            nameErrors.Count.Should().Be(2);
+            nameErrors.Should().Contain(e => e == "Name must be at least 13");
+            nameErrors.Should().Contain(e => e == "Name should not be longer than 3");
         }
     }
 }

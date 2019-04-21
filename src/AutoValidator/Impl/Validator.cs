@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutoValidator.Helpers;
 using AutoValidator.Interfaces;
 using AutoValidator.Models;
 
@@ -9,13 +10,13 @@ namespace AutoValidator.Impl
     {
         private readonly ValidationExpressionErrorMessageFactory _errorMessageFactory;
         private readonly ClassValidatorExpression _expressionValidator;
-        private readonly Dictionary<string, string> _errors;
+        private readonly Dictionary<string, List<string>> _errors;
 
         public Validator()
         {
             _errorMessageFactory = new ValidationExpressionErrorMessageFactory();
             _expressionValidator = new ClassValidatorExpression();
-            _errors = new Dictionary<string, string>();
+            _errors = new Dictionary<string, List<string>>();
         }
 
         public ValidationResult Validate()
@@ -95,16 +96,8 @@ namespace AutoValidator.Impl
 
         private void LogError(string propName, Tuple<string, List<object>> messageValue)
         {
-            EnsureUniquePropName(propName);
-            _errors.Add(propName, string.Format(messageValue.Item1, messageValue.Item2.ToArray()));
-        }
-
-        private void EnsureUniquePropName(string name)
-        {
-            if (_errors.ContainsKey(name))
-            {
-                throw new ArgumentException($"key '{name}' has already been used and errored");
-            }
+            var errorMessage = string.Format(messageValue.Item1, messageValue.Item2.ToArray());
+            _errors.AddItemToList(propName, errorMessage);
         }
     }
 }
