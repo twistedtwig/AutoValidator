@@ -75,9 +75,9 @@ validations can be used in a fluent fashion.  Only when `Validate()` is called a
  ```c#
  var validator = new Validator();
  var result = validator
-				.isMinValue(someInt, 18)
-				.IsEmailAddress(someVariable)
-				.Validate();
+	.isMinValue(someInt, 18)
+	.IsEmailAddress(someVariable)
+	.Validate();
  ```
 
 For a fuller explaination see, [Details on how to use the validators](https://github.com/twistedtwig/AutoValidator/wiki/Validator-usage)
