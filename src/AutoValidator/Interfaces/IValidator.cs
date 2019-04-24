@@ -1,4 +1,5 @@
-﻿using AutoValidator.Models;
+﻿using System;
+using AutoValidator.Models;
 
 namespace AutoValidator.Interfaces
 {
@@ -25,7 +26,16 @@ namespace AutoValidator.Interfaces
         /// <returns></returns>
         IValidator MinValue(int value, int min, string propName, string message = null);
 
-        //https://github.com/gnpretorius/simple-validator
+        /// <summary>
+        /// Custom validation expression
+        /// </summary>
+        /// <typeparam name="TMember">The type to be validated</typeparam>
+        /// <param name="value">Value to be validated</param>
+        /// <param name="memberValidationFunc">Function to validate the value</param>
+        /// <param name="propName">name of the property to be used for error message(s)</param>
+        /// <param name="errorMessage">Error message string format {0} will be the property name</param>
+        /// <returns></returns>
+        IValidator Custom<TMember>(TMember value, Func<TMember, bool> memberValidationFunc, string propName, string errorMessage);
     }
 
     public interface IValidatorExpression

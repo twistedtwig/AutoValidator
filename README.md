@@ -44,6 +44,8 @@ var validator = factory.Create<ModelToBeValidated>();
 
 You only need to create one instance of the mapper, its configuration and the factory.  Then use the factory instance to create new instances of the validator as required.
 
+For the basic Validator, validations occur as that line of code executes.  For Generic Validators the expressions are stored and only executed when `.Validate()` is called.
+
 For further information about [configuration and setup](https://github.com/twistedtwig/AutoValidator/wiki/Mapper-Configuration-Setup)
 
 
@@ -84,39 +86,19 @@ For a fuller explaination see, [Details on how to use the validators](https://gi
 
 
 
- ## Further Reading
-
- - [Mapper Configuration and Mapper Configuration Expressions](https://github.com/twistedtwig/AutoValidator/wiki/Mapper-Configuration-Setup)
- - [Example of how you could use AutoValidator in a DI framework](https://github.com/twistedtwig/AutoValidator/wiki/Dependency-injection-suggestion)
- - [Schema Validation](https://github.com/twistedtwig/AutoValidator/wiki/Validation-Schemas)
- - [Asserting Schema Valiadtion](https://github.com/twistedtwig/AutoValidator/wiki/Asserting-Schema-validation)
- - [Validators](https://github.com/twistedtwig/AutoValidator/wiki/Validator-usage)
- - [Validation Result Object](https://github.com/twistedtwig/AutoValidator/wiki/Validator-Results)
+ [Further Reading](https://github.com/twistedtwig/AutoValidator/wiki)
 
 
-### TODO
- - [x] fix up Teamcity
- - [x] add unit tests to Teamcity
- - [x] write unit tests for all IValidatorExpressions
- - [x] class validation and class expression validation assertion with error messages
- - [x] validation error messages need to be connected to the property name
- - [x] ValidationResult needs to be able to have multiple errors for each property, should have an array of errors as well as a nicely formatted string represntation.
- - [ ] be able to create expression and validate inline (without classValidator)
- - [x] classValidator creation finds mapping and adds expressions
- - [x] create configuration object for validation schema
- - [x] configuration setup to allow add mappings from assemblies
- - [x] creating custom validation function
- - [ ] allow global CreateMap to be defined in initial setup configuration
- - [x] ensure all mappings are being saved
- - [x] factory for class type to get instance of a validator with the defined mappings
- - [ ] be able to use the mapping style in simple validation process
+### TODO 
+ - [ ] add DI example code to https://github.com/twistedtwig/AutoValidator/wiki/Dependency-injection-suggestion for autofac func setup
  - [ ] have the ability to clear validation rules for T (only within that instance of a validator)
+ - [ ] create examples for usage (error messages, standard and custom)
  - [ ] custom expression error message string format options
  - [ ] standard expression error message string format options
+ - [ ] validating lists of simple types
  - [ ] test error message override in classValidator, regular string validator and regular fluent validator
- - [x] create basic start up guide at beginning of readme
- - [ ] create wiki pages for more complex stuff and link to each from readme and home of wiki
- - [ ] add more IValidatorExpression functions
- - [ ] add DI example code to https://github.com/twistedtwig/AutoValidator/wiki/Dependency-injection-suggestion for autofac func setup
- - [ ] create examples for usage
-
+ - [ ] add use mapping expression to the iClassValidator so that it will know to check for other mapping expressions to validate that object
+ - [ ] validating single child property (add mappingexpression collection object, that will recursively get all child mappings)
+ - [ ] validating child property lists
+ - [ ] add more IValidatorExpression functions (have a look at https://github.com/gnpretorius/simple-validator)
+ 

@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoValidator.Impl;
+using AutoValidator.Tests.Models;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -282,6 +283,69 @@ namespace AutoValidator.Tests
 
             testErrors.Count.Should().Be(1);
             testErrors.Should().Contain(e => e == "Test can't be null or empty");
+        }
+
+        [Test]
+
+        public void Custom_Expression_is_valid()
+        {
+            // arrange
+            
+            // act
+            var result = _subject.Custom(123, x => x < 500, "myProp", "{0} cust prop failed").Validate();
+
+            // assert
+            result.Success.Should().BeTrue();
+        }
+
+        [Test]
+
+        public void Custom_Expression_is_not_valid()
+        {
+            // arrange
+
+            // act
+            var result = _subject.Custom(123, x => x < 100, "myProp", "{0} cust prop failed").Validate();
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.Errors["myProp"].Should().Contain(e => e == "myProp cust prop failed");
+        }
+
+        [Test]
+
+        public void Custom_Model1_Expression_is_valid()
+        {
+            // arrange
+            var model = new Model1
+            {
+                Age = 18,
+                Name = "Jon Hawkins"
+            };
+
+            // act
+            var result = _subject.Custom(model, m => m.Age >= 18 && m.Name.StartsWith("Jon"), "myProp", "{0} cust prop failed").Validate();
+
+            // assert
+            result.Success.Should().BeTrue();
+        }
+
+        [Test]
+
+        public void Custom_Model1_Expression_is_not_valid()
+        {
+            // arrange
+            var model = new Model1
+            {
+                Age = 10,
+                Name = "Jack Jones"
+            };
+
+            // act
+            var result = _subject.Custom(model, m => m.Age >= 18 && m.Name.StartsWith("Jon"), "myProp", "{0} cust prop failed").Validate();
+
+            // assert
+            result.Success.Should().BeFalse();
         }
     }
 }

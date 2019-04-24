@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using AutoValidator.Helpers;
 using AutoValidator.Interfaces;
 using AutoValidator.Models;
@@ -29,8 +30,6 @@ namespace AutoValidator.Impl
 
             return result;
         }
-
-        //TODO will use IValidationExpressionErrorMessageFactory to generate final error message
 
         public IValidator IsEmailAddress(string email, string propName = "email", string message = null)
         {
@@ -89,6 +88,16 @@ namespace AutoValidator.Impl
                 var result = _errorMessageFactory.Get<int>((val, exp) => exp.MinValue(val, min, message), propName);
 
                 LogError(propName, result);
+            }
+
+            return this;
+        }
+
+        public IValidator Custom<TMember>(TMember value, Func<TMember, bool> memberValidationFunc, string propName, string errorMessage)
+        {
+            if (!memberValidationFunc.Invoke(value))
+            {
+                LogError(propName, new Tuple<string, List<object>>(errorMessage, new List<object> { propName }));
             }
 
             return this;

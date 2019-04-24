@@ -16,5 +16,10 @@ namespace AutoValidator.Interfaces
         /// </summary>
         /// <returns></returns>
         Func<IValidatorFactory> CreateFactoryFunc();
+
+        /// <summary>
+        /// Assert that all profile expressions are valid.
+        /// </summary>
+        void AssertExpressionsAreValid();
     }
 }

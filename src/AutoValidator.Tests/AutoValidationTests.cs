@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using AutoValidator.Impl;
 using AutoValidator.Interfaces;
 using AutoValidator.Models;
@@ -12,16 +10,16 @@ using NUnit.Framework;
 namespace AutoValidator.Tests
 {
     [TestFixture]
-    public class MapperConfigurationTests
+    public class AutoValidationTests
     {
-        private MapperConfiguration _subject;
+        private Impl.AutoValidation _subject;
 
         [Test]
 
         public void Passing_Null_Configuration_By_Constructor_Throws()
         {
             // arrange
-            _subject = new MapperConfiguration((MapperConfigurationExpression)null);
+            _subject = new AutoValidation((MapperConfigurationExpression)null);
 
             // act
             Action action = () => _subject.AssertExpressionsAreValid();
@@ -39,7 +37,7 @@ namespace AutoValidator.Tests
             expression.AddProfile<DuplicateInvalidMappingProfile>();
             expression.AddProfile<MissingMappingProfile>();
 
-            _subject = new MapperConfiguration(expression);
+            _subject = new AutoValidation(expression);
 
             try
             {
@@ -63,7 +61,7 @@ namespace AutoValidator.Tests
             expression.AddProfile<MissingMappingProfile>();
             expression.AddProfile<Profile1>();
 
-            _subject = new MapperConfiguration(expression);
+            _subject = new AutoValidation(expression);
 
             try
             {
@@ -86,7 +84,7 @@ namespace AutoValidator.Tests
             expression.AddProfile<Profile2>();
             expression.AddProfile<Profile1>();
 
-            _subject = new MapperConfiguration(expression);
+            _subject = new AutoValidation(expression);
 
             // act
             Action action = () => _subject.AssertExpressionsAreValid();
@@ -106,7 +104,7 @@ namespace AutoValidator.Tests
                 cfg.AddProfile<MissingMappingProfile>();
             };
 
-            _subject = new MapperConfiguration(configure);
+            _subject = new AutoValidation(configure);
 
             try
             {
@@ -132,7 +130,7 @@ namespace AutoValidator.Tests
                 cfg.AddProfile<Profile1>();
             };
 
-            _subject = new MapperConfiguration(configure);
+            _subject = new AutoValidation(configure);
             
             try
             {
@@ -157,7 +155,7 @@ namespace AutoValidator.Tests
                 cfg.AddProfile<Profile2>();
             };
 
-            _subject = new MapperConfiguration(configure);
+            _subject = new AutoValidation(configure);
 
             // act
             Action action = () => _subject.AssertExpressionsAreValid();
@@ -171,7 +169,7 @@ namespace AutoValidator.Tests
         public void Create_Factory_For_Config_That_Is_Not_Setup_Will_Throw_Exception()
         {
             // arrange
-            _subject = new MapperConfiguration((MapperConfigurationExpression)null);
+            _subject = new AutoValidation((MapperConfigurationExpression)null);
 
             // act
             Action action = () => _subject.CreateFactory();
@@ -191,7 +189,7 @@ namespace AutoValidator.Tests
                 cfg.AddProfile<Profile2>();
             };
 
-            _subject = new MapperConfiguration(configure);
+            _subject = new AutoValidation(configure);
 
             var model = new Model1
             {
@@ -222,7 +220,7 @@ namespace AutoValidator.Tests
                 cfg.AddProfile<Profile2>();
             };
 
-            _subject = new MapperConfiguration(configure);
+            _subject = new AutoValidation(configure);
 
             var model = new Model1
             {
@@ -249,13 +247,11 @@ namespace AutoValidator.Tests
 
         public void Create_Factory_Action_Will_Return_New_Instance_Each_Time()
         {
-            Action<IMapperConfigurationExpression> configure = cfg =>
-            {
-                cfg.AddProfile<Profile2>();
-                cfg.AddProfile<Profile2>();
-            };
-
-            _subject = new MapperConfiguration(configure);
+            _subject = new AutoValidation(cfg =>
+                {
+                    cfg.AddProfile<Profile2>();
+                    cfg.AddProfile<Profile2>();
+                });
 
             // act
             var factoryFunc = _subject.CreateFactoryFunc();

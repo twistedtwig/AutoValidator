@@ -28,7 +28,7 @@ namespace AutoValidator.Impl
         public void AddProfile(Type profileType) => AddProfile((IClassValidationProfile)Activator.CreateInstance(profileType));
 
 
-        public void AddProfile(Assembly assemblyToScan) => AddProfiles(new[] { assemblyToScan });
+        public void AddProfiles(Assembly assemblyToScan) => AddProfiles(new[] { assemblyToScan });
 
         public void AddProfiles(IEnumerable<Assembly> assembliesToScan) => AddMaps(assembliesToScan);
 

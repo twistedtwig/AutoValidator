@@ -11,7 +11,7 @@ namespace AutoValidator.Interfaces
 
         void AddProfile(Type profileType);
 
-        void AddProfile(Assembly assemblyToScan);
+        void AddProfiles(Assembly assemblyToScan);
 
         void AddProfiles(IEnumerable<Assembly> assembliesToScan);
 

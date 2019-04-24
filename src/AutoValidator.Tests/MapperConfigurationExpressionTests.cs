@@ -40,7 +40,7 @@ namespace AutoValidator.Tests
             _subject.Profiles.Should().BeEmpty();
 
             // act
-            _subject.AddProfile(System.Reflection.Assembly.GetExecutingAssembly());
+            _subject.AddProfiles(System.Reflection.Assembly.GetExecutingAssembly());
 
             // assert
             _subject.Profiles.Should().Contain(x => x.GetType() == typeof(DuplicateMappingProfile));

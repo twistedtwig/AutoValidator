@@ -5,16 +5,16 @@ using AutoValidator.Models;
 
 namespace AutoValidator.Impl
 {
-    public class MapperConfiguration : IConfigurationProvider
+    public class AutoValidation : IConfigurationProvider
     {
         private readonly MapperConfigurationExpression _configurationExpression;
 
-        public MapperConfiguration(Action<IMapperConfigurationExpression> configure)
+        public AutoValidation(Action<IMapperConfigurationExpression> configure)
             : this(Build(configure))
         {
         }
 
-        public MapperConfiguration(MapperConfigurationExpression configurationExpression)
+        public AutoValidation(MapperConfigurationExpression configurationExpression)
         {
             _configurationExpression = configurationExpression;
         }
