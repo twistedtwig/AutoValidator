@@ -1,11 +1,14 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using AutoValidator.Impl;
+using DependencyInjectionExample.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +25,7 @@ namespace DependencyInjectionExample
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -33,6 +36,18 @@ namespace DependencyInjectionExample
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            var validator = new AutoValidation(exp => exp.AddProfiles(typeof(Model1Profile).Assembly));
+            validator.AssertExpressionsAreValid();
+
+            var builder = new ContainerBuilder();
+            // When you do service population, it will include your controller types automatically.
+            builder.Populate(services);
+            builder.RegisterAssemblyModules(typeof(AutoValidation).Assembly);
+
+            builder.Register(r => validator.CreateFactory());
+            var appContainer = builder.Build();
+            return new AutofacServiceProvider(appContainer);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,16 +59,18 @@ namespace DependencyInjectionExample
             }
             else
             {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }

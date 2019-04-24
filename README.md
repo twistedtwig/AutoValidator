@@ -90,7 +90,7 @@ For a fuller explaination see, [Details on how to use the validators](https://gi
 
 
 ### TODO 
- - [ ] add DI example code to https://github.com/twistedtwig/AutoValidator/wiki/Dependency-injection-suggestion for autofac func setup
+ - [ ] ensure there is a test to see if a property has ignore and another value, if so assert validation expression should fail.
  - [ ] have the ability to clear validation rules for T (only within that instance of a validator)
  - [ ] create examples for usage (error messages, standard and custom)
  - [ ] custom expression error message string format options
