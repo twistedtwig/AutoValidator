@@ -71,7 +71,7 @@ var result = validator.Validate(model);
  var result = validator.IsEmailAddress(someVariable).Validate();
  ```
  
-validations can be used in a fluent fashion.  Only when `Validate()` is called are they checked and the validation result returned.
+validations can be used in a fluent fashion.
 
 ### Fluent Validator
  ```c#
