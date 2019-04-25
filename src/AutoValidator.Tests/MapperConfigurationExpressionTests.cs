@@ -358,5 +358,23 @@ namespace AutoValidator.Tests
             // assert
             result.All(v => v.Success).Should().BeFalse();
         }
+
+        [Test]
+
+        public void Invalid_Profile_With_Ignore_Used_As_Well_As_Another_Mapping_Is_Not_Valid()
+        {
+            // arrange
+            var profile = new InvalidProfileWithIgnoreUsed();
+
+            // act
+            var result = profile.ValidateExpression();
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.ProfileType.Should().Be<InvalidProfileWithIgnoreUsed>();
+            var expressionResult = result.ExpressionResults[0];
+            expressionResult.SourceClass.Should().Be<Model1>();
+            expressionResult.Errors.Should().Contain(x => x.PropertyName == "Name" && x.Error == "Ignore used with another mapping for property 'Name'");
+        }
     }
 }

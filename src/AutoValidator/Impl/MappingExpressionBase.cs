@@ -32,6 +32,11 @@ namespace AutoValidator.Impl
                 var funcGroups = constraintGroup.Select(c => c.FunctionDescription).GroupBy(cg => cg);
                 foreach (var funcGroup in funcGroups)
                 {
+                    if (funcGroup.Key == "exp.Ignore" && funcGroups.Count() > 1)
+                    {
+                        result.Errors.Add(new ExpressionValidationPropertyError(constraintGroup.Key, $"Ignore used with another mapping for property '{constraintGroup.Key}'"));
+                    }
+
                     if (funcGroup.Count() > 1)
                     {
                         result.Errors.Add(new ExpressionValidationPropertyError(constraintGroup.Key, $"Duplicate mapping for property '{constraintGroup.Key}'"));
