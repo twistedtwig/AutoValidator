@@ -90,12 +90,15 @@ For a fuller explaination see, [Details on how to use the validators](https://gi
 
 
 ### TODO 
- - [ ] have the ability to clear validation rules for T (only within that instance of a validator)
- - [ ] create examples for usage (error messages, standard and custom)
+ - [ ] allow two custom expressions on same prop as can't tell if its same expression or not.
  - [ ] custom expression error message string format options
  - [ ] standard expression error message string format options
+ - [ ] add option to pass in whole object of T to classValidator so that profile rules can use other properties to check validation
  - [ ] validating lists of simple types
+ - [ ] add option to pass in a validationSpec object (TV) as well as the object to be validated.  this can mean that the user can define dynamic expressions in a profile (i.e. the params used can change dynamically during execution)
+ - [ ] allow a dynamic object to be b used for validationSpec instead of TV, only apply that rule if a property has a value.
  - [ ] test error message override in classValidator, regular string validator and regular fluent validator
+ - [ ] think of way to pass in values to mapping profiles, think it could be a validationParameters object (VT), would mean it can be used in any of the expressions.
  - [ ] add use mapping expression to the iClassValidator so that it will know to check for other mapping expressions to validate that object
  - [ ] validating single child property (add mappingexpression collection object, that will recursively get all child mappings)
  - [ ] validating child property lists
