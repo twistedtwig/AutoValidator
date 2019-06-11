@@ -9,12 +9,12 @@ namespace AutoValidator.Tests
     [TestFixture]
     public class MapperConfigurationExpressionTests
     {
-        private MapperConfigurationExpression _subject;
+        private ValidatorConfigurationExpression _subject;
 
         [SetUp]
         public void Init()
         {
-            _subject = new MapperConfigurationExpression();
+            _subject = new ValidatorConfigurationExpression();
         }
 
         [Test]

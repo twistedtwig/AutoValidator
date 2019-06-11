@@ -8,7 +8,7 @@ using AutoValidator.Models;
 
 namespace AutoValidator.Impl
 {
-    public class MapperConfigurationExpression : IMapperConfigurationExpression
+    public class ValidatorConfigurationExpression : IValidatorConfigurationExpression
     {
         private readonly IList<IClassValidationProfile> _profiles = new List<IClassValidationProfile>();
 

@@ -347,5 +347,84 @@ namespace AutoValidator.Tests
             // assert
             result.Success.Should().BeFalse();
         }
+
+        [Test]
+
+        public void Custom_Model1_Multiple_Expressions_are_valid()
+        {
+            // arrange
+            var model = new Model1
+            {
+                Age = 18,
+                Name = "Jon Hawkins"
+            };
+
+            // act
+            var result = _subject
+                .Custom(model, m => m.Age >= 18, "Age", "must be older than 17")
+                .Custom(model, m => m.Age <= 65, "Age", "must be younger than 66")
+                .Custom(model, m => !string.IsNullOrWhiteSpace(m.Name), "Name", "{0} should not be null")
+                .Validate();
+
+            // assert
+            result.Success.Should().BeTrue();
+        }
+
+        [Test]
+
+        public void Email_Test_Can_Display_Incorrect_Email_In_Error_Message()
+        {
+            // arrange
+            var model = new Model2
+            {
+                EmailAddress = "jon.hawkins"
+            };
+
+            // act
+            var result = _subject.IsEmailAddress(model.EmailAddress, "Email", "{1} is not a valid email address").Validate();
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.Errors.Keys.Should().Contain("Email");
+            result.Errors["Email"].Should().Contain("jon.hawkins is not a valid email address");
+        }
+
+        [Test]
+
+        public void Custom_Expression_Can_Use_Value()
+        {
+            // arrange
+            var model = new Model2
+            {
+                EmailAddress = "jon.hawkins"
+            };
+
+            // act
+            var result = _subject.Custom(model.EmailAddress, m => m.Length > 555, "Email", "{1} is not long enough").Validate();
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.Errors.Keys.Should().Contain("Email");
+            result.Errors["Email"].Should().Contain("jon.hawkins is not long enough");
+        }
+
+        [Test]
+
+        public void Custom_Can_Take_Class_And_Use_Member_Expression_And_Not_Need_Prop_Name_Given()
+        {
+            // arrange
+            var model = new Model2
+            {
+                EmailAddress = "jon.hawkins"
+            };
+
+            // act
+            var result = _subject.Custom(model, m => m.EmailAddress, email => email.Length > 555, "{1} is not long enough").Validate();
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.Errors.Keys.Should().Contain("EmailAddress");
+            result.Errors["EmailAddress"].Should().Contain("jon.hawkins is not long enough");
+        }
     }
 }

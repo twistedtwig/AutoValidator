@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq.Expressions;
 using AutoValidator.Impl;
+using AutoValidator.Interfaces;
+using AutoValidator.Tests.Models;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -8,22 +11,19 @@ namespace AutoValidator.Tests
     [TestFixture]
     public class ValidationExpressionErrorMessageFactoryTests
     {
-        private ValidationExpressionErrorMessageFactory _factory;
-
-        [SetUp]
-        public void Init()
-        {
-            _factory = new ValidationExpressionErrorMessageFactory();
-        }
-
-
         [Test]
-
         public void Get_IValidatorExpression_Ignore()
         {
             // arrange
-            Action action = () => _factory.Get<bool>((x, y) => y.Ignore(), "");
+            var factory = new ValidationExpressionErrorMessageFactory<Model3, bool>();
+            factory.SetPropName("AreYouHappy");
+            Expression<Func<bool, IValidatorExpression, bool>> exp = (m, validator) => validator.Ignore();
+            factory.SetupExpression(exp);
+
+            var model = new Model3();
+
             // act
+            Action action = () => factory.Invoke(model);
 
             // assert
             action.Should().NotThrow();
@@ -34,8 +34,15 @@ namespace AutoValidator.Tests
         public void Get_IValidatorExpression_IsEmailAddress()
         {
             // arrange
-            Action action = () => _factory.Get<bool>((x, y) => y.IsEmailAddress("email", null), "");
+            var factory = new ValidationExpressionErrorMessageFactory<Model3, string>();
+            factory.SetPropName("email");
+            Expression<Func<string, IValidatorExpression, bool>> exp = (email, validator) => validator.IsEmailAddress(email, null);
+            factory.SetupExpression(exp);
+
+            var model = new Model3 { EmailAddress = "jon@email.com" };
+
             // act
+            Action action = () => factory.Invoke(model);
 
             // assert
             action.Should().NotThrow();
@@ -46,8 +53,15 @@ namespace AutoValidator.Tests
         public void Get_IValidatorExpression_NotNullOrEmpty()
         {
             // arrange
-            Action action = () => _factory.Get<bool>((x, y) => y.NotNullOrEmpty("email", null), "");
+            var factory = new ValidationExpressionErrorMessageFactory<Model3, string>();
+            factory.SetPropName("email");
+            Expression<Func<string, IValidatorExpression, bool>> exp = (email, validator) => validator.NotNullOrEmpty(email, null);
+            factory.SetupExpression(exp);
+
+            var model = new Model3 { EmailAddress = "jon@email.com" };
+
             // act
+            Action action = () => factory.Invoke(model);
 
             // assert
             action.Should().NotThrow();
@@ -58,8 +72,15 @@ namespace AutoValidator.Tests
         public void Get_IValidatorExpression_MinLength()
         {
             // arrange
-            Action action = () => _factory.Get<bool>((x, y) => y.MinLength("email", 3, null), "");
+            var factory = new ValidationExpressionErrorMessageFactory<Model3, string>();
+            factory.SetPropName("email");
+            Expression<Func<string, IValidatorExpression, bool>> exp = (email, validator) => validator.MinLength(email, 3, null);
+            factory.SetupExpression(exp);
+
+            var model = new Model3 { EmailAddress = "jon@email.com" };
+
             // act
+            Action action = () => factory.Invoke(model);
 
             // assert
             action.Should().NotThrow();
@@ -70,8 +91,15 @@ namespace AutoValidator.Tests
         public void Get_IValidatorExpression_MaxLength()
         {
             // arrange
-            Action action = () => _factory.Get<bool>((x, y) => y.MaxLength("email", 3, null), "");
+            var factory = new ValidationExpressionErrorMessageFactory<Model3, string>();
+            factory.SetPropName("email");
+            Expression<Func<string, IValidatorExpression, bool>> exp = (email, validator) => validator.MaxLength(email, 99, null);
+            factory.SetupExpression(exp);
+
+            var model = new Model3 { EmailAddress = "jon@email.com" };
+
             // act
+            Action action = () => factory.Invoke(model);
 
             // assert
             action.Should().NotThrow();
@@ -82,8 +110,15 @@ namespace AutoValidator.Tests
         public void Get_IValidatorExpression_MinValue()
         {
             // arrange
-            Action action = () => _factory.Get<int>((x, y) => y.MinValue(2, 3, null), "");
+            var factory = new ValidationExpressionErrorMessageFactory<Model3, int>();
+            factory.SetPropName("Number");
+            Expression<Func<int, IValidatorExpression, bool>> exp = (number, validator) => validator.MinValue(number, 18, null);
+            factory.SetupExpression(exp);
+
+            var model = new Model3 { Number = 23 };
+
             // act
+            Action action = () => factory.Invoke(model);
 
             // assert
             action.Should().NotThrow();

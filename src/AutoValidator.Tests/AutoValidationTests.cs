@@ -19,7 +19,7 @@ namespace AutoValidator.Tests
         public void Passing_Null_Configuration_By_Constructor_Throws()
         {
             // arrange
-            _subject = new AutoValidation((MapperConfigurationExpression)null);
+            _subject = new AutoValidation((ValidatorConfigurationExpression)null);
 
             // act
             Action action = () => _subject.AssertExpressionsAreValid();
@@ -33,7 +33,7 @@ namespace AutoValidator.Tests
         public void Passing_Bad_Configuration_Will_Throw()
         {
             // arrange
-            var expression = new MapperConfigurationExpression();
+            var expression = new ValidatorConfigurationExpression();
             expression.AddProfile<DuplicateInvalidMappingProfile>();
             expression.AddProfile<MissingMappingProfile>();
 
@@ -56,7 +56,7 @@ namespace AutoValidator.Tests
         public void Passing_Bad_Configuration_Will_Throw_Will_Not_Contain_Good_Profile()
         {
             // arrange
-            var expression = new MapperConfigurationExpression();
+            var expression = new ValidatorConfigurationExpression();
             expression.AddProfile<DuplicateInvalidMappingProfile>();
             expression.AddProfile<MissingMappingProfile>();
             expression.AddProfile<Profile1>();
@@ -80,7 +80,7 @@ namespace AutoValidator.Tests
         public void Passing_Good_Configuration_Will_Not_Throw_Any_Exceptions_On_Assert()
         {
             // arrange
-            var expression = new MapperConfigurationExpression();
+            var expression = new ValidatorConfigurationExpression();
             expression.AddProfile<Profile2>();
             expression.AddProfile<Profile1>();
 
@@ -98,7 +98,7 @@ namespace AutoValidator.Tests
         public void Passing_Bad_Configuration_Action__Will_Throw()
         {
             // arrange
-            Action<IMapperConfigurationExpression> configure = cfg =>
+            Action<IValidatorConfigurationExpression> configure = cfg =>
             {
                 cfg.AddProfile<DuplicateInvalidMappingProfile>();
                 cfg.AddProfile<MissingMappingProfile>();
@@ -123,7 +123,7 @@ namespace AutoValidator.Tests
         public void Passing_Bad_Configuration_Action__Will_Throw_Will_Not_Contain_Good_Profile()
         {
             // arrange
-            Action<IMapperConfigurationExpression> configure = cfg =>
+            Action<IValidatorConfigurationExpression> configure = cfg =>
             {
                 cfg.AddProfile<DuplicateInvalidMappingProfile>();
                 cfg.AddProfile<MissingMappingProfile>();
@@ -149,7 +149,7 @@ namespace AutoValidator.Tests
         public void Passing_Good_Configuration_Action_Will_Not_Throw_Any_Exceptions_On_Assert()
         {
             // arrange
-            Action<IMapperConfigurationExpression> configure = cfg =>
+            Action<IValidatorConfigurationExpression> configure = cfg =>
             {
                 cfg.AddProfile<Profile2>();
                 cfg.AddProfile<Profile2>();
@@ -169,7 +169,7 @@ namespace AutoValidator.Tests
         public void Create_Factory_For_Config_That_Is_Not_Setup_Will_Throw_Exception()
         {
             // arrange
-            _subject = new AutoValidation((MapperConfigurationExpression)null);
+            _subject = new AutoValidation((ValidatorConfigurationExpression)null);
 
             // act
             Action action = () => _subject.CreateFactory();
@@ -183,7 +183,7 @@ namespace AutoValidator.Tests
         public void Create_Factory_Will_Return_A_Valid_Factory()
         {
             // arrange
-            Action<IMapperConfigurationExpression> configure = cfg =>
+            Action<IValidatorConfigurationExpression> configure = cfg =>
             {
                 cfg.AddProfile<Profile2>();
                 cfg.AddProfile<Profile2>();
@@ -214,7 +214,7 @@ namespace AutoValidator.Tests
 
         public void Create_Factory_Action_Will_Return_An_Action_That_Can_Be_Passed_Back_And_Actioned_Later()
         {
-            Action<IMapperConfigurationExpression> configure = cfg =>
+            Action<IValidatorConfigurationExpression> configure = cfg =>
             {
                 cfg.AddProfile<Profile2>();
                 cfg.AddProfile<Profile2>();

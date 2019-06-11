@@ -28,8 +28,21 @@ namespace AutoValidator.Impl
             Constraints.Add(new ClassObjectValidator<T, TMember>(memberSelectorExpression, memberValidationExpression));
             return this;
         }
-        
-        public IMappingExpression<T> ForMember<TMember>(Expression<Func<T, TMember>> memberSelectorExpression, Func<TMember, bool> memberValidationFunc, string errorMessage = null)
+
+        public IMappingExpression<T> ForMember<TMember>(Expression<Func<T, TMember>> memberSelectorExpression, Expression<Func<TMember, T, IValidatorExpression, bool>> memberValidationExpression)
+        {
+            Constraints.Add(new ClassObjectValidator<T, TMember>(memberSelectorExpression, memberValidationExpression));
+            return this;
+        }
+
+        public IMappingExpression<T> ForMember<TMember>(Expression<Func<T, TMember>> memberSelectorExpression, Expression<Func<TMember, bool>> memberValidationFunc, string errorMessage = null)
+        {
+            Constraints.Add(new ObjectValidator<T, TMember>(memberSelectorExpression, memberValidationFunc, errorMessage ?? memberSelectorExpression + " did not pass validation"));
+            return this;
+        }
+
+        public IMappingExpression<T> ForMember<TMember>(Expression<Func<T, TMember>> memberSelectorExpression, Expression<Func<TMember, T, bool>> memberValidationFunc,
+            string errorMessage = null)
         {
             Constraints.Add(new ObjectValidator<T, TMember>(memberSelectorExpression, memberValidationFunc, errorMessage ?? memberSelectorExpression + " did not pass validation"));
             return this;

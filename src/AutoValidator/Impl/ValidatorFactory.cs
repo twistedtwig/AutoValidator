@@ -6,9 +6,9 @@ namespace AutoValidator.Impl
 {
     public class ValidatorFactory : IValidatorFactory
     {
-        private readonly MapperConfigurationExpression _configurationExpression;
+        private readonly ValidatorConfigurationExpression _configurationExpression;
 
-        public ValidatorFactory(MapperConfigurationExpression configExpression)
+        public ValidatorFactory(ValidatorConfigurationExpression configExpression)
         {
             _configurationExpression = configExpression;
         }

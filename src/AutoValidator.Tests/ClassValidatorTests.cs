@@ -15,8 +15,12 @@ namespace AutoValidator.Tests
         [SetUp]
         public void Init()
         {
-            var profile = new Profile1();
+            _validator = null;
+        }
 
+        public void setupBasicProfile()
+        {
+            var profile = new Profile1();
             _validator = new ClassValidator<Model1>(profile.MappingExpressions.OfType<IMappingExpression<Model1>>().Single());
         }
 
@@ -25,6 +29,7 @@ namespace AutoValidator.Tests
         public void Valid_Object_Will_Return_Correct_Result()
         {
             // arrange
+            setupBasicProfile();
             var model = new Model1
             {
                 Name = "Jon Hawkins",
@@ -44,6 +49,7 @@ namespace AutoValidator.Tests
         public void Invalid_Object_Will_Return_Errors()
         {
             // arrange
+            setupBasicProfile();
             var model = new Model1
             {
                 Name = "",
@@ -95,6 +101,142 @@ namespace AutoValidator.Tests
             nameErrors.Count.Should().Be(2);
             nameErrors.Should().Contain(e => e == "Name must be at least 13");
             nameErrors.Should().Contain(e => e == "Name should not be longer than 3");
+        }
+
+        [Test]
+
+        public void Profile_Passing_With_Whole_Object_Valid_data_Success()
+        {
+            // arrange
+            var profile = new ProfileWithWholeObject();
+            var model = new Model1
+            {
+                Age = 5,
+                Name = "Jon"
+            };
+
+            _validator = new ClassValidator<Model1>(profile.MappingExpressions.OfType<IMappingExpression<Model1>>().Single());
+            
+            // act
+            var result = _validator.Validate(model);
+
+            // assert
+            result.Success.Should().BeTrue();
+        }
+
+        [Test]
+        public void Profile_Passing_With_Whole_Object_Invalid_data_Failure()
+        {
+            // arrange
+            var profile = new ProfileWithWholeObject();
+            var model = new Model1
+            {
+                Age = 5,
+                Name = "Jon hawkins"
+            };
+
+            _validator = new ClassValidator<Model1>(profile.MappingExpressions.OfType<IMappingExpression<Model1>>().Single());
+
+            // act
+            var result = _validator.Validate(model);
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.Errors.Should().ContainKey("Age");
+            var nameErrors = result.Errors["Age"];
+            nameErrors.Count.Should().Be(1);
+            nameErrors.Should().Contain(e => e == "Age should be at least 11");
+        }
+
+        [Test]
+        public void Profile_Alt_Passing_With_Whole_Object_valid_Age_Success()
+        {
+            // arrange
+            var profile = new ProfileWithWholeObjectAgeToStringEqualLengthOfName();
+            var model = new Model1
+            {
+                Age = 5,
+                Name = "Jon h"
+            };
+
+            _validator = new ClassValidator<Model1>(profile.MappingExpressions.OfType<IMappingExpression<Model1>>().Single());
+
+            // act
+            var result = _validator.Validate(model);
+
+            // assert
+            result.Success.Should().BeTrue();
+        }
+
+        [Test]
+        public void Profile_Alt_Passing_With_Whole_Object_Invalid_age_Failure()
+        {
+            // arrange
+            var profile = new ProfileWithWholeObjectAgeToStringEqualLengthOfName();
+            var model = new Model1
+            {
+                Age = 44,
+                Name = "Jon H"
+            };
+
+            _validator = new ClassValidator<Model1>(profile.MappingExpressions.OfType<IMappingExpression<Model1>>().Single());
+
+            // act
+            var result = _validator.Validate(model);
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.Errors.Should().ContainKey("Age");
+            var nameErrors = result.Errors["Age"];
+            nameErrors.Count.Should().Be(1);
+            nameErrors.Should().Contain(e => e == "Age should be at least 5");
+        }
+
+        [Test]
+        public void Profile_With_Expression_That_Calls_A_Method_Gets_Correct_Error_Message()
+        {
+            // arrange
+            var profile = new ProfileWithWholeObject();
+            var model = new Model2
+            {
+                Number = 3,
+                EmailAddress = "jonathan.hawkins@test.com", // index of the @ is greater than the number should fail
+            };
+
+            var validator = new ClassValidator<Model2>(profile.MappingExpressions.OfType<IMappingExpression<Model2>>().Single());
+
+            // act
+            var result = validator.Validate(model);
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.Errors.Should().ContainKey("Number");
+            var numErrors = result.Errors["Number"];
+            numErrors.Count.Should().Be(1);
+            numErrors.Should().Contain(e => e == "Number should be at least 16");
+        }
+
+        [Test]
+
+        public void Using_Invalid_Email_Can_Be_Displayed_In_Error_Message()
+        {
+            // arrange
+            var profile = new EmailCustomErrorMessageWithValue();
+
+            var model = new Model2
+            {
+                EmailAddress = "jon.hawkins"
+            };
+
+            var validator = new ClassValidator<Model2>(profile.MappingExpressions.OfType<IMappingExpression<Model2>>().Single());
+            
+            // act
+            var result = validator.Validate(model);
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.Errors.Should().ContainKey("EmailAddress");
+            result.Errors["EmailAddress"].Should().Contain("jon.hawkins is not a valid email address");
         }
     }
 }

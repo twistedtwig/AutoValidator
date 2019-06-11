@@ -13,7 +13,7 @@ namespace AutoValidator.Tests
         [SetUp]
         public void Init()
         {
-            var expression = new MapperConfigurationExpression();
+            var expression = new ValidatorConfigurationExpression();
             expression.AddProfile<Profile1>();
 
             _subject = new ValidatorFactory(expression);

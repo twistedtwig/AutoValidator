@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace AutoValidator.Interfaces
 {
-    public interface IValidationExpressionErrorMessageFactory<T, TMember>
+    public interface IObjectValidatorErrorMessageFactory<T, TMember>
     {
         /// <summary>
         /// Set the property name to be evaluated for error messages
@@ -13,16 +13,22 @@ namespace AutoValidator.Interfaces
         void SetPropName(string name);
 
         /// <summary>
+        /// Set the error message format string
+        /// </summary>
+        /// <param name="message"></param>
+        void SetErrorFormat(string message);
+
+        /// <summary>
         /// set the expression to be used to evaluate the and property
         /// </summary>
         /// <param name="exp"></param>
-        void SetupExpression(Expression<Func<TMember, IValidatorExpression, bool>> exp);
+        void SetupExpression(Expression<Func<TMember, bool>> exp);
 
         /// <summary>
         /// set the expression to be used to evaluate the object and the property
         /// </summary>
         /// <param name="exp"></param>
-        void SetupExpression(Expression<Func<TMember, T, IValidatorExpression, bool>> exp);
+        void SetupExpression(Expression<Func<TMember, T, bool>> exp);
         
         /// <summary>
         /// Evaluate the property with the propname and expression previously set.

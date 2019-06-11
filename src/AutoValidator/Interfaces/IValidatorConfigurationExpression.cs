@@ -5,7 +5,7 @@ using AutoValidator.Models;
 
 namespace AutoValidator.Interfaces
 {
-    public interface IMapperConfigurationExpression
+    public interface IValidatorConfigurationExpression
     {
         void AddProfile<TProfile>() where TProfile : IClassValidationProfile, new();
 

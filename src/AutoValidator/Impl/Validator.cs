@@ -9,13 +9,11 @@ namespace AutoValidator.Impl
 {
     public class Validator : IValidator
     {
-        private readonly ValidationExpressionErrorMessageFactory _errorMessageFactory;
         private readonly ClassValidatorExpression _expressionValidator;
         private readonly Dictionary<string, List<string>> _errors;
 
         public Validator()
         {
-            _errorMessageFactory = new ValidationExpressionErrorMessageFactory();
             _expressionValidator = new ClassValidatorExpression();
             _errors = new Dictionary<string, List<string>>();
         }
@@ -30,14 +28,14 @@ namespace AutoValidator.Impl
 
             return result;
         }
-
+        
         public IValidator IsEmailAddress(string email, string propName = "email", string message = null)
         {
             var valid = _expressionValidator.IsEmailAddress(email, message);
 
             if (!valid)
             {
-                var result = _errorMessageFactory.Get<string>((val, exp) => exp.IsEmailAddress(email, message), propName);
+                var result = getErrorMessage((val, exp) => exp.IsEmailAddress(email, message), email, propName);
 
                 LogError(propName, result);
             }
@@ -49,7 +47,7 @@ namespace AutoValidator.Impl
         {
             if (!_expressionValidator.NotNullOrEmpty(text))
             {
-                var result = _errorMessageFactory.Get<string>((val, exp) => exp.NotNullOrEmpty(text, message), propName);
+                var result = getErrorMessage((val, exp) => exp.NotNullOrEmpty(text, message), text, propName);
 
                 LogError(propName, result);
             }
@@ -61,7 +59,7 @@ namespace AutoValidator.Impl
         {
             if (!_expressionValidator.MinLength(text, minLength, message))
             {
-                var result = _errorMessageFactory.Get<string>((val, exp) => exp.MinLength(text, minLength, message), propName);
+                var result = getErrorMessage((val, exp) => exp.MinLength(text, minLength, message), text, propName);
 
                 LogError(propName, result);
             }
@@ -73,7 +71,7 @@ namespace AutoValidator.Impl
         {
             if (!_expressionValidator.MaxLength(text, maxLength, message))
             {
-                var result = _errorMessageFactory.Get<string>((val, exp) => exp.MaxLength(text, maxLength, message), propName);
+                var result = getErrorMessage((val, exp) => exp.MaxLength(text, maxLength, message), text, propName);
 
                 LogError(propName, result);
             }
@@ -85,7 +83,7 @@ namespace AutoValidator.Impl
         {
             if (!_expressionValidator.MinValue(value, min, message))
             {                
-                var result = _errorMessageFactory.Get<int>((val, exp) => exp.MinValue(val, min, message), propName);
+                var result = getErrorMessage((val, exp) => exp.MinValue(val, min, message), value, propName);
 
                 LogError(propName, result);
             }
@@ -97,10 +95,38 @@ namespace AutoValidator.Impl
         {
             if (!memberValidationFunc.Invoke(value))
             {
-                LogError(propName, new Tuple<string, List<object>>(errorMessage, new List<object> { propName }));
+                LogError(propName, new Tuple<string, List<object>>(errorMessage, new List<object> { propName , value }));
             }
 
             return this;
+        }
+
+        public IValidator Custom<T, TMember>(T value, Expression<Func<T, TMember>> memberSelectorExpression, Func<TMember, bool> memberValidationFunc, string errorMessage) where T : class
+        {
+            TMember member = memberSelectorExpression.Compile().Invoke(value);
+
+            if (!memberValidationFunc.Invoke(member))
+            {
+                var memberInfo = ReflectionHelper.FindProperty(memberSelectorExpression);
+                var propName = memberInfo.Name;
+
+                LogError(propName, new Tuple<string, List<object>>(errorMessage, new List<object> { propName, member }));
+            }
+
+            return this;
+        }
+
+        private Tuple<string, List<object>> getErrorMessage<T>(Expression<Func<T, IValidatorExpression, bool>> expression, T value, string propName)
+        {
+            var errorMessageFactory = new ValidationExpressionErrorMessageFactory<T, T>();
+            errorMessageFactory.SetPropName(propName);
+            errorMessageFactory.SetupExpression(expression);
+            var messageDetails = errorMessageFactory.Invoke(value);
+
+            // add the value into the values for string format so that it can be used in custom error messages.
+            messageDetails.Item2.Add(value);
+
+            return messageDetails;
         }
 
         private void LogError(string propName, Tuple<string, List<object>> messageValue)

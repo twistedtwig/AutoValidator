@@ -7,14 +7,14 @@ namespace AutoValidator.Impl
 {
     public class AutoValidation : IConfigurationProvider
     {
-        private readonly MapperConfigurationExpression _configurationExpression;
+        private readonly ValidatorConfigurationExpression _configurationExpression;
 
-        public AutoValidation(Action<IMapperConfigurationExpression> configure)
+        public AutoValidation(Action<IValidatorConfigurationExpression> configure)
             : this(Build(configure))
         {
         }
 
-        public AutoValidation(MapperConfigurationExpression configurationExpression)
+        public AutoValidation(ValidatorConfigurationExpression configurationExpression)
         {
             _configurationExpression = configurationExpression;
         }
@@ -45,9 +45,9 @@ namespace AutoValidator.Impl
             return CreateFactory;
         }
 
-        private static MapperConfigurationExpression Build(Action<IMapperConfigurationExpression> configureFunc)
+        private static ValidatorConfigurationExpression Build(Action<IValidatorConfigurationExpression> configureFunc)
         {
-            var expr = new MapperConfigurationExpression();
+            var expr = new ValidatorConfigurationExpression();
             configureFunc(expr);
             return expr;
         }

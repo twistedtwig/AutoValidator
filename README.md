@@ -26,27 +26,26 @@ If you just want to validate individual variables, simply create an instance of 
  var validator = new Validator();
  ```
 
-If you wish to use schema validation; first create an instance of `MapperConfiguration`, define the `MapperConfigurationExpression` then create a factory to create instance of validators.
+If you wish to use schema validation; first create an instance of `AutoValidation`, define the `ValidatorConfigurationExpression` then create a factory to create instance of validators.
 
 ```c#
-var mapper = new MapperConfiguration();
-Action<IMapperConfigurationExpression> configure = cfg =>
+Action<IValidatorConfigurationExpression> configure = cfg =>
 {
     cfg.AddProfile<ModelToBeValidatedProfile>();
 };
 
-mapper = new MapperConfiguration(configure);
+var validator = new AutoValidation(configure);
 
 var factory =  mapper.CreateFactory();
 
 var validator = factory.Create<ModelToBeValidated>();
 ```
 
-You only need to create one instance of the mapper, its configuration and the factory.  Then use the factory instance to create new instances of the validator as required.
+You only need to create one instance of the AutoValidation, its configuration and the factory.  Then use the factory instance to create new instances of the validator as required.
 
 For the basic Validator, validations occur as that line of code executes.  For Generic Validators the expressions are stored and only executed when `.Validate()` is called.
 
-For further information about [configuration and setup](https://github.com/twistedtwig/AutoValidator/wiki/Mapper-Configuration-Setup)
+For further information about [configuration and setup](https://github.com/twistedtwig/AutoValidator/wiki/Validator-Configuration-Setup)
 
 
 ## Basics of using validators
@@ -90,10 +89,7 @@ For a fuller explaination see, [Details on how to use the validators](https://gi
 
 
 ### TODO 
- - [ ] allow two custom expressions on same prop as can't tell if its same expression or not.
- - [ ] custom expression error message string format options
- - [ ] standard expression error message string format options
- - [ ] add option to pass in whole object of T to classValidator so that profile rules can use other properties to check validation
+ - [ ] object validation does not always deal with custom expressions for the format string.
  - [ ] validating lists of simple types
  - [ ] add option to pass in a validationSpec object (TV) as well as the object to be validated.  this can mean that the user can define dynamic expressions in a profile (i.e. the params used can change dynamically during execution)
  - [ ] allow a dynamic object to be b used for validationSpec instead of TV, only apply that rule if a property has a value.
@@ -102,5 +98,7 @@ For a fuller explaination see, [Details on how to use the validators](https://gi
  - [ ] add use mapping expression to the iClassValidator so that it will know to check for other mapping expressions to validate that object
  - [ ] validating single child property (add mappingexpression collection object, that will recursively get all child mappings)
  - [ ] validating child property lists
+ - [ ] regular validator could make prop name optional.  if not given could just return general errors, rename errors to prop errors
+ - [ ] have a way of setting some values in the validator initial setup
  - [ ] add more IValidatorExpression functions (have a look at https://github.com/gnpretorius/simple-validator)
  
