@@ -20,6 +20,7 @@
     <PackageProjectUrl>https://github.com/twistedtwig/AutoValidator</PackageProjectUrl>
     <Version>0.0.1</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>AutoValidator's aim is to create a simple, fluent and intiutive framework to validate data and models in your dotnet applications. Simply put; an application would validate some data and get a result object. That object would state sucess or failure and detail the failing data.</Description>
   </PropertyGroup>
 
 </Project>
