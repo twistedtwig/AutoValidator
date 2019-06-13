@@ -7,6 +7,8 @@ namespace AutoValidator.Interfaces
 {
     public interface IValidatorConfigurationExpression
     {
+        ValidatorSettings Settings { get; }
+
         void AddProfile<TProfile>() where TProfile : IClassValidationProfile, new();
 
         void AddProfile(Type profileType);

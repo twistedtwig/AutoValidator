@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace AutoValidator.Tests
 {
     [TestFixture]
-    public class MapperConfigurationExpressionTests
+    public class ValidatorConfigurationExpressionTests
     {
         private ValidatorConfigurationExpression _subject;
 
@@ -18,7 +18,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Add_Profile_By_Instance_Is_Stored()
         {
             // arrange
@@ -33,7 +32,19 @@ namespace AutoValidator.Tests
         }
 
         [Test]
+        public void Settings_Returns_A_Valid_Object()
+        {
+            // arrange
+            
+            // act
+            _subject.Settings.UseCamelCase = true;
 
+            // assert
+            _subject.Settings.Should().NotBeNull();
+            _subject.Settings.UseCamelCase.Should().BeTrue();
+        }
+
+        [Test]
         public void Add_Profile_By_Assembly_Is_Stored()
         {
             // arrange
@@ -53,7 +64,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Add_Multiple_Profiles_By_Instance_Are_Stored()
         {
             // arrange
@@ -71,7 +81,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Adding_Same_Profile_By_Instance_Twice_Will_Not_Double_Up()
         {
             // arrange
@@ -87,7 +96,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Add_Profile_By_GenericType_Is_Stored()
         {
             // arrange
@@ -101,7 +109,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Add_Multiple_Profiles_By_GenericType_Are_Stored()
         {
             // arrange
@@ -115,7 +122,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Adding_Same_Profile_By_GenericType_Twice_Will_Not_Double_Up()
         {
             // arrange
@@ -130,7 +136,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Add_Profile_By_Type_Is_Stored()
         {
             // arrange
@@ -144,7 +149,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Add_Multiple_Profiles_By_Type_Are_Stored()
         {
             // arrange
@@ -159,7 +163,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Adding_Same_Profile_By_Type_Twice_Will_Not_Double_Up()
         {
             // arrange
@@ -175,7 +178,6 @@ namespace AutoValidator.Tests
         }
         
         [Test]
-
         public void Adding_Profiles_From_Assembly()
         {
             // arrange
@@ -190,7 +192,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Profile_All_Mappings_Are_Valid()
         {
             // arrange
@@ -205,7 +206,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Profile_With_Ignore_And_Mappings_Are_Valid()
         {
             // arrange
@@ -220,7 +220,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Profile_Missing_A_Mapping_Is_Not_Valid()
         {
             // arrange
@@ -240,7 +239,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Profile_With_Duplicate_Member_Mapping_IsValid()
         { // arrange
             var profile = new DuplicateMappingProfile();
@@ -254,7 +252,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Profile_With_Duplicate_Member_And_Same_Expression_Mapping_Is_Not_Valid()
         { // arrange
             var profile = new DuplicateInvalidMappingProfile();
@@ -275,7 +272,6 @@ namespace AutoValidator.Tests
        
 
         [Test]
-
         public void Profile_With_Multiple_Member_Mapping_Errors_Is_Not_Valid()
         { // arrange
             var profile = new MultipleMappingErrorsProfile();
@@ -299,7 +295,6 @@ namespace AutoValidator.Tests
         }
         
         [Test]
-
         public void Profile_With_Multiple_Mappings_Each_Mapping_Has_Errors_Is_Not_Valid()
         { // arrange
             var profile = new MultipleMappingsWithErrorsProfile();
@@ -328,7 +323,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Valid_Profiles_Have_Been_Added_Is_Valid()
         {
             // arrange
@@ -344,7 +338,6 @@ namespace AutoValidator.Tests
 
 
         [Test]
-
         public void InValid_Profiles_Have_Been_Added_Is_Not_Valid()
         {
             // arrange
@@ -360,7 +353,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Invalid_Profile_With_Ignore_Used_As_Well_As_Another_Mapping_Is_Not_Valid()
         {
             // arrange

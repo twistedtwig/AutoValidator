@@ -5,9 +5,17 @@ namespace AutoValidator.Models
 {
     public class ValidationResult
     {
+        private readonly bool _useCamelCase = false;
+
         public ValidationResult()
         {
             Errors = new Dictionary<string, List<string>>();
+        }
+
+        public ValidationResult(ValidatorSettings settings, bool success = true) : this()
+        {
+            _useCamelCase = settings.UseCamelCase;
+            Success = success;
         }
 
         public bool Success { get; set; }
@@ -17,7 +25,8 @@ namespace AutoValidator.Models
 
         public void AddError(string propName, string errorMessage)
         {
-            Errors.AddItemToList(propName, errorMessage);
+            var name = _useCamelCase ? propName.ToCamelCase() : propName;
+            Errors.AddItemToList(name, errorMessage);
         }
     }
 }

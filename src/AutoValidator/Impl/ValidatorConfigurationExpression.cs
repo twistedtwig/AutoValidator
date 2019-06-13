@@ -23,6 +23,8 @@ namespace AutoValidator.Impl
             }
         }
 
+        public ValidatorSettings Settings { get; } = new ValidatorSettings();
+
         public void AddProfile<TProfile>() where TProfile : IClassValidationProfile, new() => AddProfile(new TProfile());
 
         public void AddProfile(Type profileType) => AddProfile((IClassValidationProfile)Activator.CreateInstance(profileType));

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using AutoValidator.Impl;
 using AutoValidator.Interfaces;
+using AutoValidator.Models;
 using AutoValidator.Tests.Models;
 using FluentAssertions;
 using NUnit.Framework;
@@ -11,17 +12,19 @@ namespace AutoValidator.Tests
     public class ClassValidatorTests
     {
         private ClassValidator<Model1> _validator;
+        private ValidatorSettings _settings;
 
         [SetUp]
         public void Init()
         {
             _validator = null;
+            _settings = new ValidatorSettings();
         }
 
         public void setupBasicProfile()
         {
             var profile = new Profile1();
-            _validator = new ClassValidator<Model1>(profile.MappingExpressions.OfType<IMappingExpression<Model1>>().Single());
+            _validator = new ClassValidator<Model1>(profile.MappingExpressions.OfType<IMappingExpression<Model1>>().Single(), _settings);
         }
 
         [Test]
@@ -75,6 +78,37 @@ namespace AutoValidator.Tests
         }
 
         [Test]
+        public void Invalid_Object_Will_Return_Errors_Settings_Use_CamelCase_observed()
+        {
+            // arrange
+            _settings.UseCamelCase = true;
+
+            setupBasicProfile();
+            var model = new Model1
+            {
+                Name = "",
+                Age = 17
+            };
+
+            // act
+            var result = _validator.Validate(model);
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.Errors.Count.Should().Be(2);
+
+            result.Errors.Should().ContainKey("name");
+            var nameErrors = result.Errors["name"];
+            nameErrors.Count.Should().Be(1);
+            nameErrors.Should().Contain(e => e == "Name can't be null or empty");
+
+            result.Errors.Should().ContainKey("age");
+            var ageErrors = result.Errors["age"];
+            ageErrors.Count.Should().Be(1);
+            ageErrors.Should().Contain(e => e == "Age should be at least 18");
+        }
+
+        [Test]
 
         public void Multiple_Errors_On_A_Property_Show_In_Validation_Error()
         {
@@ -87,7 +121,7 @@ namespace AutoValidator.Tests
                 Name = "test"
             };
 
-            _validator = new ClassValidator<Model1>(profile.MappingExpressions.OfType<IMappingExpression<Model1>>().Single());
+            _validator = new ClassValidator<Model1>(profile.MappingExpressions.OfType<IMappingExpression<Model1>>().Single(), _settings);
 
 
             // act
@@ -115,7 +149,7 @@ namespace AutoValidator.Tests
                 Name = "Jon"
             };
 
-            _validator = new ClassValidator<Model1>(profile.MappingExpressions.OfType<IMappingExpression<Model1>>().Single());
+            _validator = new ClassValidator<Model1>(profile.MappingExpressions.OfType<IMappingExpression<Model1>>().Single(), _settings);
             
             // act
             var result = _validator.Validate(model);
@@ -135,7 +169,7 @@ namespace AutoValidator.Tests
                 Name = "Jon hawkins"
             };
 
-            _validator = new ClassValidator<Model1>(profile.MappingExpressions.OfType<IMappingExpression<Model1>>().Single());
+            _validator = new ClassValidator<Model1>(profile.MappingExpressions.OfType<IMappingExpression<Model1>>().Single(), _settings);
 
             // act
             var result = _validator.Validate(model);
@@ -159,7 +193,7 @@ namespace AutoValidator.Tests
                 Name = "Jon h"
             };
 
-            _validator = new ClassValidator<Model1>(profile.MappingExpressions.OfType<IMappingExpression<Model1>>().Single());
+            _validator = new ClassValidator<Model1>(profile.MappingExpressions.OfType<IMappingExpression<Model1>>().Single(), _settings);
 
             // act
             var result = _validator.Validate(model);
@@ -179,7 +213,7 @@ namespace AutoValidator.Tests
                 Name = "Jon H"
             };
 
-            _validator = new ClassValidator<Model1>(profile.MappingExpressions.OfType<IMappingExpression<Model1>>().Single());
+            _validator = new ClassValidator<Model1>(profile.MappingExpressions.OfType<IMappingExpression<Model1>>().Single(), _settings);
 
             // act
             var result = _validator.Validate(model);
@@ -203,7 +237,7 @@ namespace AutoValidator.Tests
                 EmailAddress = "jonathan.hawkins@test.com", // index of the @ is greater than the number should fail
             };
 
-            var validator = new ClassValidator<Model2>(profile.MappingExpressions.OfType<IMappingExpression<Model2>>().Single());
+            var validator = new ClassValidator<Model2>(profile.MappingExpressions.OfType<IMappingExpression<Model2>>().Single(), _settings);
 
             // act
             var result = validator.Validate(model);
@@ -228,7 +262,7 @@ namespace AutoValidator.Tests
                 EmailAddress = "jon.hawkins"
             };
 
-            var validator = new ClassValidator<Model2>(profile.MappingExpressions.OfType<IMappingExpression<Model2>>().Single());
+            var validator = new ClassValidator<Model2>(profile.MappingExpressions.OfType<IMappingExpression<Model2>>().Single(), _settings);
             
             // act
             var result = validator.Validate(model);

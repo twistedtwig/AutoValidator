@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoValidator.Impl;
+using AutoValidator.Models;
 using AutoValidator.Tests.Models;
 using FluentAssertions;
 using NUnit.Framework;
@@ -9,6 +10,13 @@ namespace AutoValidator.Tests
     [TestFixture]
     public class MappingExpressionTests
     {
+        private ValidatorSettings _settings;
+
+        [SetUp]
+        public void Init()
+        {
+            _settings = new ValidatorSettings();
+        }
 
         //TEST validate for each prop / expression type
         [Test]
@@ -29,7 +37,7 @@ namespace AutoValidator.Tests
                 .ForMember(m => m.Number, num => num >= 18);
 
             // act
-            var result = expression.Validate(model);
+            var result = expression.Validate(model, _settings);
 
             // assert
             result.Should().NotBeNull();
@@ -55,7 +63,7 @@ namespace AutoValidator.Tests
 //                .ForMember(m => m.Number, num => num >= 18);
 //
 //            // act
-//            var result = expression.Validate(model);
+//            var result = expression.Validate(model, _settings);
 //
 //            // assert
 //            result.Should().NotBeNull();
@@ -86,7 +94,7 @@ namespace AutoValidator.Tests
 //                .ForMember(m => m.Number, num => num >= 18);
 //
 //            // act
-//            var result = expression.Validate(model);
+//            var result = expression.Validate(model, _settings);
 //
 //            // assert
 //            result.Should().NotBeNull();
@@ -175,7 +183,7 @@ namespace AutoValidator.Tests
                 .ForMember(m => m.Name, (n, exp) => exp.MaxLength(n, 999, null));
 
             // act
-            var result = expression.Validate(model);
+            var result = expression.Validate(model, _settings);
 
             // assert
             result.Success.Should().BeTrue();
@@ -198,7 +206,7 @@ namespace AutoValidator.Tests
                 .ForMember(m => m.Name, (n, exp) => exp.MaxLength(n, 3, null));
 
             // act
-            var result = expression.Validate(model);
+            var result = expression.Validate(model, _settings);
 
             // assert
             result.Success.Should().BeTrue();
@@ -221,7 +229,7 @@ namespace AutoValidator.Tests
                 .ForMember(m => m.Name, (n, exp) => exp.MaxLength(n, 3, null));
 
             // act
-            var result = expression.Validate(model);
+            var result = expression.Validate(model, _settings);
 
             // assert
             result.Errors.Should().ContainKey("Name");
@@ -246,7 +254,7 @@ namespace AutoValidator.Tests
                 .ForMember(m => m.Name, (n, exp) => exp.MaxLength(n, 3, "{0} custom error {1} {2}"));
 
             // act
-            var result = expression.Validate(model);
+            var result = expression.Validate(model, _settings);
 
             // assert
             result.Errors.Should().ContainKey("Name");
@@ -270,7 +278,7 @@ namespace AutoValidator.Tests
                 .ForMember(m => m.Name, (n, exp) => exp.MinLength(n, 4444, null));
 
             // act
-            var result = expression.Validate(model);
+            var result = expression.Validate(model, _settings);
 
             // assert
             result.Errors.Should().ContainKey("Name");
@@ -294,7 +302,7 @@ namespace AutoValidator.Tests
                 .ForMember(m => m.Name, (n, exp) => exp.MinLength(n, 4444, "{0} - {1} - {2}"));
 
             // act
-            var result = expression.Validate(model);
+            var result = expression.Validate(model, _settings);
 
             // assert
             result.Errors.Should().ContainKey("Name");
@@ -318,7 +326,7 @@ namespace AutoValidator.Tests
                 .ForMember(m => m.Name, (n, exp) => exp.MinLength(n, 3, null));
 
             // act
-            var result = expression.Validate(model);
+            var result = expression.Validate(model, _settings);
 
             // assert
             result.Success.Should().BeTrue();
@@ -339,7 +347,7 @@ namespace AutoValidator.Tests
                 .ForMember(m => m.Name, (n, exp) => exp.MinLength(n, 2, null));
 
             // act
-            var result = expression.Validate(model);
+            var result = expression.Validate(model, _settings);
 
             // assert
             result.Success.Should().BeTrue();
@@ -357,7 +365,7 @@ namespace AutoValidator.Tests
                 .ForMember(m => m.Name, (n, exp) => exp.NotNullOrEmpty(n, null));
 
             // act
-            var result = expression.Validate(model);
+            var result = expression.Validate(model, _settings);
 
             // assert
             result.Errors.Should().ContainKey("Name");
@@ -378,7 +386,7 @@ namespace AutoValidator.Tests
                 .ForMember(m => m.Name, (n, exp) => exp.NotNullOrEmpty(n, "Test {0} Test"));
 
             // act
-            var result = expression.Validate(model);
+            var result = expression.Validate(model, _settings);
 
             // assert
             result.Errors.Should().ContainKey("Name");
@@ -399,7 +407,7 @@ namespace AutoValidator.Tests
                 .ForMember(m => m.Name, (n, exp) => exp.NotNullOrEmpty(n, null));
 
             // act
-            var result = expression.Validate(model);
+            var result = expression.Validate(model, _settings);
 
             // assert
             result.Success.Should().BeTrue();
@@ -417,7 +425,7 @@ namespace AutoValidator.Tests
                 .ForMember(m => m.Name, (n, exp) => exp.IsEmailAddress(n, null));
 
             // act
-            var result = expression.Validate(model);
+            var result = expression.Validate(model, _settings);
 
             // assert
             result.Success.Should().BeFalse();
@@ -439,7 +447,7 @@ namespace AutoValidator.Tests
                 .ForMember(m => m.Name, (n, exp) => exp.IsEmailAddress(n, "{0} != email '{1}'"));
 
             // act
-            var result = expression.Validate(model);
+            var result = expression.Validate(model, _settings);
 
             // assert
             result.Success.Should().BeFalse();
@@ -460,7 +468,7 @@ namespace AutoValidator.Tests
                 .ForMember(m => m.Name, (n, exp) => exp.IsEmailAddress(n, "{0} != email '{1}'"));
 
             // act
-            var result = expression.Validate(model);
+            var result = expression.Validate(model, _settings);
 
             // assert
             result.Success.Should().BeTrue();
@@ -476,7 +484,7 @@ namespace AutoValidator.Tests
             expression.ForMember(m => m.Number, (n, exp) => exp.MinValue(n, 11, null));
 
             // act
-            var result = expression.Validate(model);
+            var result = expression.Validate(model, _settings);
 
             // assert
             result.Success.Should().BeFalse();
@@ -496,7 +504,7 @@ namespace AutoValidator.Tests
             expression.ForMember(m => m.Number, (n, exp) => exp.MinValue(n, 10, null));
 
             // act
-            var result = expression.Validate(model);
+            var result = expression.Validate(model, _settings);
 
             // assert
             result.Success.Should().BeTrue();
@@ -512,7 +520,7 @@ namespace AutoValidator.Tests
             expression.ForMember(m => m.Number, (n, exp) => exp.MinValue(n, 10, null));
 
             // act
-            var result = expression.Validate(model);
+            var result = expression.Validate(model, _settings);
 
             // assert
             result.Success.Should().BeTrue();
@@ -528,7 +536,7 @@ namespace AutoValidator.Tests
             expression.ForMember(m => m.Number, (n, exp) => exp.MinValue(n, 11, "Test {0} should be more than {1} {2}"));
 
             // act
-            var result = expression.Validate(model);
+            var result = expression.Validate(model, _settings);
 
             // assert
             result.Success.Should().BeFalse();
@@ -538,31 +546,53 @@ namespace AutoValidator.Tests
             nameErrors.Should().Contain(e => e == "Test 11 should be more than Number 10");
         }
 
-//        [Test]
-//
-//        public void Custom_Can_Pass_Object_In_To_Be_Validated()
-//        {
-//            // arrange
-//            var model = new Model2
-//            {
-//                EmailAddress = "jon@test.com",
-//                Number = 3,
-//                Category = "cat1"
-//            };
-//
-//            var expression = new MappingExpression<Model2>();
-//            expression.ForMember(x => x.Number, (num, obj) => num > obj.Category.Length, "{0} number should be greater than the length of Cat");
-//
-//            // act
-//            var result = expression.Validate(model);
-//
-//            // assert
-//            result.Success.Should().BeFalse();
-//            result.Errors.Should().ContainKey("Number");
-//            var nameErrors = result.Errors["Number"];
-//            nameErrors.Count.Should().Be(1);
-//            nameErrors.Should().Contain(e => e == "8 number should be greater than the length of Cat");
-//        }
+        [Test]
+
+        public void MinValue_Too_small_Value_Returns_False_custom_error_Settings_Use_CamelCase_observed()
+        {
+            // arrange
+            _settings.UseCamelCase = true;
+
+            var model = new Model2 { Number = 10 };
+            var expression = new MappingExpression<Model2>();
+            expression.ForMember(m => m.Number, (n, exp) => exp.MinValue(n, 11, "Test {0} should be more than {1} {2}"));
+
+            // act
+            var result = expression.Validate(model, _settings);
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.Errors.Should().ContainKey("number");
+            var nameErrors = result.Errors["number"];
+            nameErrors.Count.Should().Be(1);
+            nameErrors.Should().Contain(e => e == "Test 11 should be more than Number 10");
+        }
+
+        //        [Test]
+        //
+        //        public void Custom_Can_Pass_Object_In_To_Be_Validated()
+        //        {
+        //            // arrange
+        //            var model = new Model2
+        //            {
+        //                EmailAddress = "jon@test.com",
+        //                Number = 3,
+        //                Category = "cat1"
+        //            };
+        //
+        //            var expression = new MappingExpression<Model2>();
+        //            expression.ForMember(x => x.Number, (num, obj) => num > obj.Category.Length, "{0} number should be greater than the length of Cat");
+        //
+        //            // act
+        //            var result = expression.Validate(model, _settings);
+        //
+        //            // assert
+        //            result.Success.Should().BeFalse();
+        //            result.Errors.Should().ContainKey("Number");
+        //            var nameErrors = result.Errors["Number"];
+        //            nameErrors.Count.Should().Be(1);
+        //            nameErrors.Should().Contain(e => e == "8 number should be greater than the length of Cat");
+        //        }
 
     }
 }

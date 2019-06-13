@@ -45,6 +45,12 @@ You only need to create one instance of the AutoValidation, its configuration an
 
 For the basic Validator, validations occur as that line of code executes.  For Generic Validators the expressions are stored and only executed when `.Validate()` is called.
 
+### Settings
+
+within the initial configuration setup, you have access to the settings.  These allow you to setup the way the application will run, such as:
+
+ 1) UseCamelCase - The system will camelCase the property names (default is false) - See BasicUseCaseExamples project, HomeController for an example.
+
 For further information about [configuration and setup](https://github.com/twistedtwig/AutoValidator/wiki/Validator-Configuration-Setup)
 
 
@@ -89,6 +95,9 @@ For a fuller explaination see, [Details on how to use the validators](https://gi
 
 
 ### TODO 
+ - [x] add option to store validaton prop names as camel case, update docs to show this, some settings method
+ - [ ] include all properties in validaiton result regardless of error or not
+ - [ ] an extension method that turns the result into an extension of the original object
  - [ ] object validation does not always deal with custom expressions for the format string.
  - [ ] validating lists of simple types
  - [ ] add option to pass in a validationSpec object (TV) as well as the object to be validated.  this can mean that the user can define dynamic expressions in a profile (i.e. the params used can change dynamically during execution)

@@ -10,12 +10,15 @@ namespace AutoValidator.Impl
     public class Validator : IValidator
     {
         private readonly ClassValidatorExpression _expressionValidator;
+        private readonly ValidatorSettings _settings;
         private readonly Dictionary<string, List<string>> _errors;
 
-        public Validator()
+        public Validator(ValidatorSettings settings = null)
         {
             _expressionValidator = new ClassValidatorExpression();
             _errors = new Dictionary<string, List<string>>();
+
+            _settings = settings ?? new ValidatorSettings();
         }
 
         public ValidationResult Validate()
@@ -131,8 +134,9 @@ namespace AutoValidator.Impl
 
         private void LogError(string propName, Tuple<string, List<object>> messageValue)
         {
+            var name = _settings.UseCamelCase ? propName.ToCamelCase() : propName;
             var errorMessage = string.Format(messageValue.Item1, messageValue.Item2.ToArray());
-            _errors.AddItemToList(propName, errorMessage);
+            _errors.AddItemToList(name, errorMessage);
         }
     }
 }

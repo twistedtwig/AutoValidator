@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoValidator.Impl;
+using AutoValidator.Models;
 using AutoValidator.Tests.Models;
 using FluentAssertions;
 using NUnit.Framework;
@@ -17,7 +18,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Empty_String_Is_Not_Valid_Email_Address()
         {
             // arrange
@@ -37,7 +37,6 @@ namespace AutoValidator.Tests
 
 
         [Test]
-
         public void Dot_Com_Is_Valid_Email()
         {
             // arrange
@@ -53,7 +52,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Null_String_Is_Not_Valid()
         {
             // arrange
@@ -71,7 +69,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Empty_String_Is_Not_Valid()
         {
             // arrange
@@ -89,7 +86,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void White_Space_String_Is_Not_Valid()
         {
             // arrange
@@ -107,7 +103,6 @@ namespace AutoValidator.Tests
         }
         
         [Test]
-
         public void Any_String_Is_Valid()
         {
             // arrange
@@ -123,7 +118,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Two_Errors_Do_Combine()
         {
             // arrange
@@ -149,7 +143,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Too_long_string_Max_Length_String_not_valid()
         {
             // arrange
@@ -167,7 +160,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void string_Max_Length_String_valid()
         {
             // arrange
@@ -181,7 +173,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Too_Short_string_Min_Length_String_Not_Valid()
         {
             // arrange
@@ -199,7 +190,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Long_String_Min_Length_String_Is_Valid()
         {
             // arrange
@@ -212,7 +202,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Int_Min_Value_Too_Low_Is_Not_Valid()
         {
             // arrange
@@ -230,7 +219,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Int_Min_Value_Equal_To_Min_Is_Valid()
         {
             // arrange
@@ -243,7 +231,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Int_Min_Value_Greater_Than_Min_Is_Valid()
         {
             // arrange
@@ -256,7 +243,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Multiple_Errors_On_A_Property_Show_In_Validation_Error()
         {
             // arrange
@@ -286,7 +272,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Custom_Expression_is_valid()
         {
             // arrange
@@ -299,7 +284,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Custom_Expression_is_not_valid()
         {
             // arrange
@@ -313,7 +297,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Custom_Model1_Expression_is_valid()
         {
             // arrange
@@ -331,7 +314,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Custom_Model1_Expression_is_not_valid()
         {
             // arrange
@@ -349,7 +331,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Custom_Model1_Multiple_Expressions_are_valid()
         {
             // arrange
@@ -371,7 +352,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Email_Test_Can_Display_Incorrect_Email_In_Error_Message()
         {
             // arrange
@@ -390,7 +370,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Custom_Expression_Can_Use_Value()
         {
             // arrange
@@ -409,7 +388,6 @@ namespace AutoValidator.Tests
         }
 
         [Test]
-
         public void Custom_Can_Take_Class_And_Use_Member_Expression_And_Not_Need_Prop_Name_Given()
         {
             // arrange
@@ -425,6 +403,31 @@ namespace AutoValidator.Tests
             result.Success.Should().BeFalse();
             result.Errors.Keys.Should().Contain("EmailAddress");
             result.Errors["EmailAddress"].Should().Contain("jon.hawkins is not long enough");
+        }
+
+        [Test]
+        public void Custom_Can_Take_Class_And_Use_Member_Expression_And_Not_Need_Prop_Name_Given_Settings_Use_CamelCase_observed()
+        {
+            // arrange
+            var settings = new ValidatorSettings
+            {
+                UseCamelCase = true
+            };
+
+            var model = new Model2
+            {
+                EmailAddress = "jon.hawkins"
+            };
+
+            _subject = new Validator(settings);
+
+            // act
+            var result = _subject.Custom(model, m => m.EmailAddress, email => email.Length > 555, "{1} is not long enough").Validate();
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.Errors.Keys.Should().Contain("emailAddress");
+            result.Errors["emailAddress"].Should().Contain("jon.hawkins is not long enough");
         }
     }
 }

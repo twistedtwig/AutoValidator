@@ -23,7 +23,7 @@ namespace AutoValidator.Impl
             var expression = _configurationExpression.Profiles.SelectMany(p => p.MappingExpressions).OfType<IMappingExpression<T>>().FirstOrDefault(exp => exp.SourceType == typeof(T));
             if(expression == null) throw new ArgumentNullException("", "unmapped model requested");
 
-            var validator = new ClassValidator<T>(expression);
+            var validator = new ClassValidator<T>(expression, _configurationExpression.Settings);
 
             return validator;
         }

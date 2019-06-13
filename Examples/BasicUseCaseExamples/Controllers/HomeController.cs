@@ -24,7 +24,11 @@ namespace BasicUseCaseExamples.Controllers
         public HomeController()
         {
             // for simplicity this is here, but in a real world you would initialize it at the root of your application (see DependencyInjectionExample)
-            var validation = new AutoValidation(cfg => cfg.AddProfile<UserModelProfile>());
+            var validation = new AutoValidation(cfg =>
+            {
+                cfg.AddProfile<UserModelProfile>();
+                cfg.Settings.UseCamelCase = true;
+            });
             _factory = validation.CreateFactory();
         }
         

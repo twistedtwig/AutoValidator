@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using NUnit.Framework;
 using System.Linq.Expressions;
 using AutoValidator.Tests.Models;
@@ -45,12 +43,7 @@ namespace AutoValidator.Tests
                 Name = "Jon",
                 Age = 18
             };
-
-            var parameter = Expression.Parameter(typeof(Model1), "x");
-//            var member = Expression.Property(parameter, "Age"); //x.Age
-            var constant = Expression.Constant(3);
-//            var body1 = Expression.GreaterThanOrEqual(member, constant); //x.Id >= 3
-
+            
             Expression<Func<Model1, bool>> fullExpression = x => x.Age >= 3;
             var body = fullExpression.Body;
 

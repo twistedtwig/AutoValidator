@@ -12,7 +12,7 @@ namespace AutoValidator.Interfaces
 
     public interface IMappingExpression<T> : ITypeMapConfiguration
     {
-        ValidationResult Validate(T obj);
+        ValidationResult Validate(T obj, ValidatorSettings settings);
 
         /// <summary>
         /// Standard validation expressions

@@ -6,10 +6,10 @@ using AutoValidator.Models;
 namespace AutoValidator.Impl
 {
     public class MappingExpression<T> : MappingExpressionBase<T>, IMappingExpression<T>
-    {
-        public ValidationResult Validate(T obj)
+    {        
+        public ValidationResult Validate(T obj, ValidatorSettings settings)
         {
-            var result = ValidationResult.SuccessResult;
+            var result = new ValidationResult(settings);
 
             foreach (var constraint in Constraints)
             {
