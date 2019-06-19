@@ -95,6 +95,8 @@ For a fuller explaination see, [Details on how to use the validators](https://gi
 
 
 ### TODO 
+ - [ ] create assertion that nullable is not null | has value
+ - [ ] allow custom expression to check that nullable is not null | has value
  - [x] add option to store validaton prop names as camel case, update docs to show this, some settings method
  - [ ] include all properties in validaiton result regardless of error or not
  - [ ] an extension method that turns the result into an extension of the original object
