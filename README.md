@@ -95,12 +95,9 @@ For a fuller explaination see, [Details on how to use the validators](https://gi
 
 
 ### TODO 
- - [ ] create assertion that nullable is not null | has value
- - [ ] allow custom expression to check that nullable is not null | has value
- - [x] add option to store validaton prop names as camel case, update docs to show this, some settings method
  - [ ] include all properties in validaiton result regardless of error or not
- - [ ] an extension method that turns the result into an extension of the original object
  - [ ] object validation does not always deal with custom expressions for the format string.
+ - [ ] an extension method that turns the result into an extension of the original object
  - [ ] validating lists of simple types
  - [ ] add option to pass in a validationSpec object (TV) as well as the object to be validated.  this can mean that the user can define dynamic expressions in a profile (i.e. the params used can change dynamically during execution)
  - [ ] allow a dynamic object to be b used for validationSpec instead of TV, only apply that rule if a property has a value.
