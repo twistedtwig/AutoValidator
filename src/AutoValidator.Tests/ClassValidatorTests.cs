@@ -272,5 +272,55 @@ namespace AutoValidator.Tests
             result.Errors.Should().ContainKey("EmailAddress");
             result.Errors["EmailAddress"].Should().Contain("jon.hawkins is not a valid email address");
         }
+
+        [Test]
+
+        public void Null_Checks_Catch_Errors()
+        {
+            // arrange
+            var profile = new NullItemMappingProfile();
+
+            var model = new NullableModel();
+
+            var validator = new ClassValidator<NullableModel>(profile.MappingExpressions.OfType<IMappingExpression<NullableModel>>().Single(), _settings);
+
+            // act
+            var result = validator.Validate(model);
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.Errors.Should().ContainKey("EmailAddress");
+            result.Errors["EmailAddress"].Should().Contain("EmailAddress Is Null");
+
+            result.Errors.Should().ContainKey("AreYouHappy");
+            result.Errors["AreYouHappy"].Should().Contain("AreYouHappy Is Null");
+
+            result.Errors.Should().ContainKey("Number");
+            result.Errors["Number"].Should().Contain("Number Is Null");
+        }
+
+        [Test]
+
+        public void Null_Checks_With_Values_Pass()
+        {
+            // arrange
+            var profile = new NullItemMappingProfile();
+
+            var model = new NullableModel
+            {
+                Model1 = new Model1(),
+                EmailAddress = "e",
+                Number = 22,
+                AreYouHappy = true
+            };
+
+            var validator = new ClassValidator<NullableModel>(profile.MappingExpressions.OfType<IMappingExpression<NullableModel>>().Single(), _settings);
+
+            // act
+            var result = validator.Validate(model);
+
+            // assert
+            result.Success.Should().BeTrue();
+        }
     }
 }

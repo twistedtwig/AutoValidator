@@ -370,6 +370,127 @@ namespace AutoValidator.Tests
         }
 
         [Test]
+        public void IsNotNull_Check_Nullable_Int_Null_Returns_Error()
+        {
+            // arrange
+            var model = new NullableModel
+            {
+                AreYouHappy = true,
+                Model1 = new Model1(),
+                EmailAddress = "e",
+                Number = null
+            };
+
+            // act
+            var result = _subject.IsNotNull(model.Number, "Number", "test").Validate();
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.Errors.Keys.Should().Contain("Number");
+            result.Errors["Number"].Should().Contain("test");
+        }
+
+        [Test]
+        public void IsNotNull_Check_Nullable_Int_NotNull_Doesnot_Return_Error()
+        {
+            // arrange
+            var model = new NullableModel
+            {
+                AreYouHappy = true,
+                Model1 = new Model1(),
+                EmailAddress = "e",
+                Number = 2
+            };
+
+            // act
+            var result = _subject.IsNotNull(model.Number, "Number", "test").Validate();
+
+            // assert
+            result.Success.Should().BeTrue();
+        }
+
+        [Test]
+        public void IsNotNull_Check_String_Null_Returns_Error()
+        {
+            // arrange
+            var model = new NullableModel
+            {
+                AreYouHappy = true,
+                Model1 = new Model1(),
+                EmailAddress = null,
+                Number = 2
+            };
+
+            // act
+            var result = _subject.IsNotNull(model.EmailAddress, "EmailAddress", "teste").Validate();
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.Errors.Keys.Should().Contain("EmailAddress");
+            result.Errors["EmailAddress"].Should().Contain("teste");
+        }
+
+        [Test]
+        public void IsNotNull_Check_String_NotNull_DoesNot_Return_Error()
+        {
+            // arrange
+            var model = new NullableModel
+            {
+                AreYouHappy = true,
+                Model1 = new Model1(),
+                EmailAddress = "w",
+                Number = 2
+            };
+
+            // act
+            var result = _subject.IsNotNull(model.EmailAddress, "EmailAddress", "teste").Validate();
+
+            // assert
+            result.Success.Should().BeTrue();
+        }
+
+        [Test]
+        public void IsNotNull_Check_NullObject_Null_Returns_Error()
+        {
+            // arrange
+            var model = new NullableModel
+            {
+                AreYouHappy = true,
+                Model1 = null,
+                EmailAddress = "ee",
+                Number = 2
+            };
+
+            // act
+            var result = _subject.IsNotNull(model.Model1, "Model1", "testm").Validate();
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.Errors.Keys.Should().Contain("Model1");
+            result.Errors["Model1"].Should().Contain("testm");
+        }
+
+        [Test]
+        public void IsNotNull_Check_NotNull_Object_DoesNot_Return_Error()
+        {
+            // arrange
+            var model = new NullableModel
+            {
+                AreYouHappy = true,
+                Model1 = new Model1(),
+                EmailAddress = "ee",
+                Number = 2
+            };
+
+            // act
+            var result = _subject.IsNotNull(model.Model1, "Model1", "testm").Validate();
+
+            // assert
+            result.Success.Should().BeTrue();
+        }
+
+
+        [Test]
         public void Custom_Expression_Can_Use_Value()
         {
             // arrange
@@ -429,5 +550,46 @@ namespace AutoValidator.Tests
             result.Errors.Keys.Should().Contain("emailAddress");
             result.Errors["emailAddress"].Should().Contain("jon.hawkins is not long enough");
         }
+
+        [Test]
+        public void Custom_Check_Nullable_Type_WhichIsNotNull_DoesNot_Return_Error()
+        {
+            // arrange
+            var model = new NullableModel
+            {
+                AreYouHappy = true,
+                Model1 = null,
+                EmailAddress = "ee",
+                Number = 2
+            };
+
+            // act
+            var result = _subject.Custom(model, m => m.Number, num => num.HasValue, "{1} it is null").Validate();
+
+            // assert
+            result.Success.Should().BeTrue();
+        }
+
+        [Test]
+        public void Custom_Check_Nullable_Type_WhichIsNull_Does_Return_Error()
+        {
+            // arrange
+            var model = new NullableModel
+            {
+                AreYouHappy = true,
+                Model1 = null,
+                EmailAddress = "ee",
+                Number = null
+            };
+
+            // act
+            var result = _subject.Custom(model, m => m.Number, num => num.HasValue, "{0} it is null").Validate();
+
+            // assert
+            result.Success.Should().BeFalse();
+            result.Errors.Keys.Should().Contain("Number");
+            result.Errors["Number"].Should().Contain("Number it is null");
+        }
+
     }
 }

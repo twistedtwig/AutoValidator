@@ -108,6 +108,11 @@ namespace AutoValidator.Impl
                     format = ValidationMessageConstStrings.Ignore;
                     break;
 
+                case "Boolean IsNotNull(System.Object, System.String)":
+                    messageOverride = GetArgumentMessageOverride(obj, methodCall, 1);
+                    format = !string.IsNullOrWhiteSpace(messageOverride) ? messageOverride : ValidationMessageConstStrings.IsNotNull;
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException("unknown IValidatorExpression expression method");
             }

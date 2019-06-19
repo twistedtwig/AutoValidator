@@ -1,4 +1,5 @@
 ﻿using AutoValidator.Impl;
+using AutoValidator.Tests.Models;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -179,6 +180,84 @@ namespace AutoValidator.Tests
             
             // act
             var result = _subject.Ignore();
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public void Not_Null_Test_string_Null_False()
+        {
+            // arrange
+            string val = null;
+
+            // act
+            var result = _subject.IsNotNull(val);
+
+            // assert
+            result.Should().BeFalse();
+        }
+
+        [Test]
+        public void Not_Null_Test_string_NotNull_True()
+        {
+            // arrange
+            string val = "";
+
+            // act
+            var result = _subject.IsNotNull(val);
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public void Not_Null_Test_NullableInt_Null_False()
+        {
+            // arrange
+            int? val = null;
+
+            // act
+            var result = _subject.IsNotNull(val);
+
+            // assert
+            result.Should().BeFalse();
+        }
+
+        [Test]
+        public void Not_Null_Test_NullableInt_NotNull_True()
+        {
+            // arrange
+            int? val = 3;
+
+            // act
+            var result = _subject.IsNotNull(val);
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public void Not_Null_Test_CustomObject_Null_False()
+        {
+            // arrange
+            BasicListModel val = null;
+
+            // act
+            var result = _subject.IsNotNull(val);
+
+            // assert
+            result.Should().BeFalse();
+        }
+
+        [Test]
+        public void Not_Null_Test_CustomObject_NotNull_True()
+        {
+            // arrange
+            BasicListModel val = new BasicListModel();
+
+            // act
+            var result = _subject.IsNotNull(val);
 
             // assert
             result.Should().BeTrue();

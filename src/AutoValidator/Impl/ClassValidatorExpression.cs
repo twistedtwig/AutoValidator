@@ -44,5 +44,17 @@ namespace AutoValidator.Impl
         {
             return value >= min;
         }
+
+        public bool IsNotNull(object obj, string message = null)
+        {
+            return obj != null;
+//            if (obj == null) return false;
+//            
+//            Type type = obj.GetType();
+//            if (!type.IsValueType) return true; // ref-type
+//            if (Nullable.GetUnderlyingType(type) != null) return true; // Nullable<T>
+//
+//            return false; // value-type
+        }
     }
 }

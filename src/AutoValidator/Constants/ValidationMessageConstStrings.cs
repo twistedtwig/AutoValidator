@@ -9,5 +9,6 @@
 
         public static string IntMinValue => "{1} should be at least {0}";
         public static string Ignore => "Ignoring property {0}";
+        public static string IsNotNull => "{0} Is Null";
     }
 }

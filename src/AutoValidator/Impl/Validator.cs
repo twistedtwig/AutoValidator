@@ -94,6 +94,18 @@ namespace AutoValidator.Impl
             return this;
         }
 
+        public IValidator IsNotNull(object obj, string propName, string message = null)
+        {
+            if (!_expressionValidator.IsNotNull(obj))
+            {
+                var result = getErrorMessage((val, exp) => exp.IsNotNull(val, message), obj, propName);
+
+                LogError(propName, result);
+            }
+
+            return this;
+        }
+
         public IValidator Custom<TMember>(TMember value, Func<TMember, bool> memberValidationFunc, string propName, string errorMessage)
         {
             if (!memberValidationFunc.Invoke(value))

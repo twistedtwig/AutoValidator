@@ -59,6 +59,15 @@ namespace AutoValidator.Interfaces
         IValidator MinValue(int value, int min, string propName, string message = null);
 
         /// <summary>
+        /// Checks to see if the object is not null
+        /// </summary>
+        /// <param name="obj">object to check is not null</param>
+        /// <param name="propName">The name of the property, to be used in errors</param>
+
+        /// <returns></returns>
+        IValidator IsNotNull(object obj, string propName, string message = null);
+
+        /// <summary>
         /// Custom validation expression
         /// </summary>
         /// <typeparam name="TMember">The type to be validated</typeparam>
@@ -137,6 +146,13 @@ namespace AutoValidator.Interfaces
         /// <param name="message">optional error message, leave blank to use default</param>
         /// <returns>bool</returns>
         bool MinValue(int value, int min, string message = null);
+
+        /// <summary>
+        /// Check if an object is null or not.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        bool IsNotNull(object obj, string message = null);
     }
 
 }
