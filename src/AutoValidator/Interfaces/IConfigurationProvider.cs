@@ -21,5 +21,7 @@ namespace AutoValidator.Interfaces
         /// Assert that all profile expressions are valid.
         /// </summary>
         void AssertExpressionsAreValid();
+
+        bool HasMap(Type t);
     }
 }

@@ -33,6 +33,22 @@ namespace AutoValidator.Impl
             }
         }
 
+        public bool HasMap(Type t)
+        {
+            foreach (var profile in _configurationExpression.Profiles)
+            {
+                foreach (var mappingExpression in profile.MappingExpressions)
+                {
+                    if (mappingExpression.SourceType == t)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public IValidatorFactory CreateFactory()
         {
             if(_configurationExpression == null) throw new ArgumentNullException("", "Configuration has not been configured");

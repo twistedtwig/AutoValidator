@@ -262,5 +262,37 @@ namespace AutoValidator.Tests
             // assert
             factory1.Equals(factory2).Should().BeFalse();
         }
+
+        [Test]
+        public void Has_CreateMap_For_Class_Finds_Map_Returns_True()
+        {
+            Action<IValidatorConfigurationExpression> configure = cfg =>
+            {
+                cfg.AddProfile<Profile2>();
+            };
+
+            _subject = new AutoValidation(configure);
+
+            var mapType = typeof(Model1);
+
+            var result = _subject.HasMap(mapType);
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public void Has_CreateMap_For_Class_NoMapping_Returns_False()
+        {
+            Action<IValidatorConfigurationExpression> configure = cfg =>
+            {
+                cfg.AddProfile<Profile2>();
+            };
+
+            _subject = new AutoValidation(configure);
+
+            var mapType = typeof(Model2);
+
+            var result = _subject.HasMap(mapType);
+            result.Should().BeFalse();
+        }
     }
 }
