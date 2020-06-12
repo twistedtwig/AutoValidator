@@ -11,9 +11,7 @@ AutoValidator's aim is to create a simple, fluent and intiutive framework to val
 There are two basic ways to validate data:
 
  * Simply call validate on each item of data as you need to.
- * Define a validation schema for a model, then call validate on an instance of that model.
-
-One of the principles AutoValidator follows is that exceptions should only happen in exceptional situations, so it will not throw an exception when some data is incorrect, it will simply return a result object detailing what is wrong.
+ * Define a validation schema for a model, then call validate on an instance of that model. (preferred approach)
 
 the validation schema process is heavily guided by [AutoMapper](https://github.com/AutoMapper/AutoMapper).
 
