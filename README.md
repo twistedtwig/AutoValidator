@@ -85,10 +85,6 @@ validations can be used in a fluent fashion.
 	.Validate();
  ```
 
-For a fuller explaination see, [Details on how to use the validators](https://github.com/twistedtwig/AutoValidator/wiki/Validator-usage)
-
-
-
  [Further Reading](https://github.com/twistedtwig/AutoValidator/wiki)
 
 
