@@ -56,7 +56,7 @@ For further information about [configuration and setup](https://github.com/twist
 
 There are two types of validators.  Generic and non generic.
 
- - Generic validators use the schema validation process set out in [configuration and expression setup](https://github.com/twistedtwig/AutoValidator/wiki/Mapper-Configuration-Setup)
+ - Generic validators use the schema validation process set out in [configuration and expression setup](https://github.com/twistedtwig/AutoValidator/wiki/Validator-Configuration-Setup)
  - Non Generic validators are for validating individual variables.
 
  ### Generic Validator
